@@ -94,7 +94,7 @@ function cran_add_age() {
   cran_append_text(element, " (" + days + " " + unit + " ago)");
 }
 
-function cran_inject_vignette_exts() {
+function cran_add_vignette_exts() {
   var elements = document.body.getElementsByTagName("td");
   var i = cran_index_of_first_element(elements, "Vignettes");
   if (i < 0) return;
@@ -111,7 +111,8 @@ function cran_inject_vignette_exts() {
     
 cran_inject_materials();
 cran_inject_maintainer();
-cran_inject_vignette_exts();
+cran_add_vignette_exts();
+cran_add_age();
 
 cran_count("Author");
 
