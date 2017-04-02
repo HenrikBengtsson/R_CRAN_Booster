@@ -113,7 +113,6 @@ cran_inject_materials();
 cran_inject_maintainer();
 cran_inject_vignette_exts();
 
-/* FIXME: Don't count, e.g. [aut, cre, cph] */
 cran_count("Author");
 
 var count = 0;
