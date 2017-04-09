@@ -128,4 +128,5 @@ count = count + cran_count("Reverse.*depends");
 count = count + cran_count("Reverse.*imports");
 count = count + cran_count("Reverse.*linking.*to");
 count = count + cran_count("Reverse.*suggests");
+count = count + cran_count("Reverse.*enhances");
 cran_add_count("Reverse.*dependencies", count);
