@@ -62,8 +62,14 @@ function cran_url() {
 	if (element.getAttribute("name") == "citation_public_url") { 
             return(element.getAttribute("content"));
 	}
-    } 
-    return null;
+    }
+
+    // Fallback: some package pages don't have the above meta tag.
+    elements = document.getElementsByTagName("title");
+    if (elements.length == 0) return null;
+    
+    element = elements[0];
+    return element.innerText.replace(/CRAN - Package /, '');
 }
 
 function cran_package() {
@@ -89,12 +95,12 @@ function cran_inject_other_urls() {
     tr2.appendChild(td);
     td = document.createElement('td');
 
+    var pkg = cran_package();
     var a;
     var url;
-    
-    // Add METACRAN link
+
     a = document.createElement("a");
-    url = "https://www.r-pkg.org/pkg/" + cran_package();
+    url = "https://www.r-pkg.org/pkg/" + pkg;
     a.innerText = url;
     a.href = url;
     a.title = "Package page on METACRAN";
@@ -102,7 +108,15 @@ function cran_inject_other_urls() {
 
     td.appendChild(document.createElement("br"));
     a = document.createElement("a");
-    url = "https://www.rdocumentation.org/packages/" + cran_package();
+    url = "https://github.com/cran/" + pkg;
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on GitHub CRAN mirror";
+    td.appendChild(a);
+    
+    td.appendChild(document.createElement("br"));
+    a = document.createElement("a");
+    url = "https://www.rdocumentation.org/packages/" + pkg;
     a.innerText = url;
     a.href = url;
     a.title = "Package page on RDocumentation";
@@ -110,12 +124,20 @@ function cran_inject_other_urls() {
     
     td.appendChild(document.createElement("br"));
     a = document.createElement("a");
-    url = "https://libraries.io/cran/" + cran_package();
+    url = "https://libraries.io/cran/" + pkg;
     a.innerText = url;
     a.href = url;
-    a.title = "Package page on RDocumentation";
+    a.title = "Package page on Libraries.io";
     td.appendChild(a);
-    
+
+    td.appendChild(document.createElement("br"));
+    a = document.createElement("a");
+    url = "https://mran.microsoft.com/package/" + pkg;
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on Microsoft MRAN";
+    td.appendChild(a);
+
     tr2.appendChild(td);
     table.appendChild(tr2);
 }
