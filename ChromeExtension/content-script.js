@@ -54,6 +54,72 @@ function cran_inject_maintainer() {
     cran_append_a(element, '<', email, '>', 'https://r-pkg.org/maint/' + email);
 }
 
+function cran_url() {
+    var element = null;
+    var elements = document.head.getElementsByTagName("meta");
+    for (var i=0; i < elements.length; i++) {
+        element = elements[i];
+	if (element.getAttribute("name") == "citation_public_url") { 
+            return(element.getAttribute("content"));
+	}
+    } 
+    return null;
+}
+
+function cran_package() {
+    return(cran_url().replace(/.*package=/, ''));
+}
+
+function cran_find_h4(pattern) {
+    var elements = document.body.getElementsByTagName("h4");
+    var i = cran_index_of_first_element(elements, pattern);
+    if (i < 0) return null;
+    return(elements[i]);
+}
+
+function cran_inject_other_urls() {
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "CRAN.*checks");
+    var td = elements[i];
+    var tr = td.parentNode;
+    var table = tr.parentNode;
+    var tr2 = document.createElement('tr');
+    td = document.createElement('td');
+    td.innerText = "Other URLs:";
+    tr2.appendChild(td);
+    td = document.createElement('td');
+
+    var a;
+    var url;
+    
+    // Add METACRAN link
+    a = document.createElement("a");
+    url = "https://www.r-pkg.org/pkg/" + cran_package();
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on METACRAN";
+    td.appendChild(a);
+
+    td.appendChild(document.createElement("br"));
+    a = document.createElement("a");
+    url = "https://www.rdocumentation.org/packages/" + cran_package();
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on RDocumentation";
+    td.appendChild(a);
+    
+    td.appendChild(document.createElement("br"));
+    a = document.createElement("a");
+    url = "https://libraries.io/cran/" + cran_package();
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on RDocumentation";
+    td.appendChild(a);
+    
+    tr2.appendChild(td);
+    table.appendChild(tr2);
+}
+
 function cran_append_text(element, text) {
     var t = document.createTextNode(text);
     element.appendChild(t);
@@ -73,10 +139,7 @@ function cran_count(pattern) {
 }
 
 function cran_add_count(pattern, count) {
-    var elements = document.body.getElementsByTagName("h4");
-    var i = cran_index_of_first_element(elements, pattern);
-    if (i < 0) return;
-    var element = elements[i];
+    var element = cran_find_h4(pattern);
     cran_append_text(element, " (n = " + count + ")");
 }
 
@@ -130,3 +193,5 @@ count = count + cran_count("Reverse.*linking.*to");
 count = count + cran_count("Reverse.*suggests");
 count = count + cran_count("Reverse.*enhances");
 cran_add_count("Reverse.*dependencies", count);
+
+cran_inject_other_urls();
