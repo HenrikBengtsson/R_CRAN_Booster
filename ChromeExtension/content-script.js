@@ -162,6 +162,7 @@ function cran_count(pattern) {
 
 function cran_add_count(pattern, count) {
     var element = cran_find_h4(pattern);
+    if (element == null) return;
     cran_append_text(element, " (n = " + count + ")");
 }
 
