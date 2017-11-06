@@ -34,7 +34,21 @@ function cran_append_a(dom, prefix, text, suffix, url) {
 function cran_inject_materials() {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "Materials");
-    if (i < 0) return;
+    if (i < 0) {
+        i = cran_index_of_first_element(elements, "NeedsCompilation");
+        if (i < 0) return;
+        var td = elements[i];
+        var tr = td.parentNode;
+        var table = tr.parentNode;
+        var tr2 = document.createElement('tr');
+        var td2 = document.createElement('td');
+        td2.innerText = "Materials:";
+        tr2.appendChild(td2);
+        td2 = document.createElement('td');
+        tr2.appendChild(td2);
+	tr.parentNode.insertBefore(tr2, tr.nextSibling);
+        i = cran_index_of_first_element(elements, "Materials");
+    }
     var element = elements[i+1];
     cran_append_a(element, '', 'NAMESPACE', ' ', 'NAMESPACE');
     cran_append_a(element, '', 'DESCRIPTION', ' ', 'DESCRIPTION');
