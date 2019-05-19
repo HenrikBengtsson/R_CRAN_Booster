@@ -31,6 +31,35 @@ function cran_append_a(dom, prefix, text, suffix, url) {
     return dom;
 }
 
+function cran_url() {
+    var element = null;
+    var elements = document.head.getElementsByTagName("meta");
+    for (var i=0; i < elements.length; i++) {
+        element = elements[i];
+	if (element.getAttribute("name") == "citation_public_url") { 
+            return(element.getAttribute("content"));
+	}
+    }
+
+    // Fallback: some package pages don't have the above meta tag.
+    elements = document.getElementsByTagName("title");
+    if (elements.length == 0) return null;
+    
+    element = elements[0];
+    return element.innerText.replace(/CRAN - Package /, '');
+}
+
+function cran_package() {
+    return(cran_url().replace(/.*package=/, ''));
+}
+
+function cran_find_h4(pattern) {
+    var elements = document.body.getElementsByTagName("h4");
+    var i = cran_index_of_first_element(elements, pattern);
+    if (i < 0) return null;
+    return(elements[i]);
+}
+
 function cran_inject_materials() {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "Materials");
@@ -69,35 +98,6 @@ function cran_inject_maintainer() {
     var email = t.replace(/.*</, '').replace(/>.*/, '').replace(/ at /, '@');
     element.innerText = name;
     cran_append_a(element, '<', email, '>', 'https://r-pkg.org/maint/' + email);
-}
-
-function cran_url() {
-    var element = null;
-    var elements = document.head.getElementsByTagName("meta");
-    for (var i=0; i < elements.length; i++) {
-        element = elements[i];
-	if (element.getAttribute("name") == "citation_public_url") { 
-            return(element.getAttribute("content"));
-	}
-    }
-
-    // Fallback: some package pages don't have the above meta tag.
-    elements = document.getElementsByTagName("title");
-    if (elements.length == 0) return null;
-    
-    element = elements[0];
-    return element.innerText.replace(/CRAN - Package /, '');
-}
-
-function cran_package() {
-    return(cran_url().replace(/.*package=/, ''));
-}
-
-function cran_find_h4(pattern) {
-    var elements = document.body.getElementsByTagName("h4");
-    var i = cran_index_of_first_element(elements, pattern);
-    if (i < 0) return null;
-    return(elements[i]);
 }
 
 function cran_inject_other_urls() {
