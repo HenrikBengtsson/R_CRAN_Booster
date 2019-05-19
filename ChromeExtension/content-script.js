@@ -151,6 +151,51 @@ function cran_inject_other_urls() {
     table.appendChild(tr2);
 }
 
+function cran_inject_cran_checks() {
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "CRAN.*checks");
+    var element = elements[i+1];
+    var pkg = cran_package();
+    
+//    element.appendChild(document.createTextNode(" "));
+//    img = document.createElement("img");
+//    img.src = "https://cranchecks.info/badges/summary/" + pkg;
+//    img.alt = "CRAN check summary";
+//    element.appendChild(img);
+    
+    element.appendChild(document.createTextNode(" "));
+    img = document.createElement("img");
+    img.src = "https://cranchecks.info/badges/worst/" + pkg;
+    img.alt = "CRAN check worst result";
+    element.appendChild(img);
+    
+    element.appendChild(document.createTextNode(" (Linux: "));
+    img = document.createElement("img");
+    img.src = "https://cranchecks.info/badges/flavor/linux/" + pkg;
+    img.alt = "CRAN check Linux results";
+    element.appendChild(img);
+    
+    element.appendChild(document.createTextNode(" Solaris: "));
+    img = document.createElement("img");
+    img.src = "https://cranchecks.info/badges/flavor/solaris/" + pkg;
+    img.alt = "CRAN check Solaris results";
+    element.appendChild(img);
+    
+    element.appendChild(document.createTextNode(" macOS: "));
+    img = document.createElement("img");
+    img.src = "https://cranchecks.info/badges/flavor/osx/" + pkg;
+    img.alt = "CRAN check macOS results";
+    element.appendChild(img);
+    
+    element.appendChild(document.createTextNode(" Windows: "));
+    img = document.createElement("img");
+    img.src = "https://cranchecks.info/badges/flavor/windows/" + pkg;
+    img.alt = "CRAN check Windows results";
+    element.appendChild(img);
+    
+    element.appendChild(document.createTextNode(")"));
+}
+
 function cran_inject_download_badges() {
     var element = cran_find_h4("Downloads");
     var pkg = cran_package();
@@ -232,6 +277,7 @@ function cran_add_vignette_exts() {
 }
     
 cran_inject_materials();
+cran_inject_cran_checks();
 cran_inject_maintainer();
 cran_inject_download_badges();
 cran_add_vignette_exts();

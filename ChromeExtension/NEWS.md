@@ -5,6 +5,8 @@ Chrome Extension: R_CRAN_Booster
 
 NEW FEATURES:
 
+ * Add badges to 'CRAN checks' section.
+ 
  * Add download badges to 'Downloads' section.
  
 
