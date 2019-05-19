@@ -52,7 +52,10 @@ function cran_inject_materials() {
     var element = elements[i+1];
     cran_append_a(element, '', 'NAMESPACE', ' ', 'NAMESPACE');
     cran_append_a(element, '', 'DESCRIPTION', ' ', 'DESCRIPTION');
-//     cran_append_a(element, '', 'LICENSE', ' ', 'LICENSE');
+    //     cran_append_a(element, '', 'LICENSE', ' ', 'LICENSE');
+    var pkg = cran_package();
+    var url = "https://github.com/cran/" + pkg + "/commits/master";
+    cran_append_a(element, '(', 'commits', ') ', url);
 }
 
 
@@ -120,14 +123,6 @@ function cran_inject_other_urls() {
     a.title = "Package page on METACRAN";
     td.appendChild(a);
 
-    td.appendChild(document.createElement("br"));
-    a = document.createElement("a");
-    url = "https://github.com/cran/" + pkg;
-    a.innerText = url;
-    a.href = url;
-    a.title = "Package page on GitHub CRAN mirror";
-    td.appendChild(a);
-    
     td.appendChild(document.createElement("br"));
     a = document.createElement("a");
     url = "https://www.rdocumentation.org/packages/" + pkg;
