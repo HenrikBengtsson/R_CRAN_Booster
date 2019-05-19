@@ -1,6 +1,13 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
+## Version 0.0.0.9003 [2019-05-19]
+
+NEW FEATURES:
+
+ * Add download badges to 'Downloads' section.
+ 
+
 ## Version 0.0.0.9002 [2019-05-19]
 
 NEW FEATURES:

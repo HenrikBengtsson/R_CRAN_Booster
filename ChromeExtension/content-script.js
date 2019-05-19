@@ -151,6 +151,33 @@ function cran_inject_other_urls() {
     table.appendChild(tr2);
 }
 
+function cran_inject_download_badges() {
+    var element = cran_find_h4("Downloads");
+    var pkg = cran_package();
+    var img;
+    var text;
+
+    var div = document.createElement("div");
+    element.after(div);    
+    
+    img = document.createElement("img");
+    img.src = "https://cranlogs.r-pkg.org/badges/grand-total/" + pkg;
+    img.alt = "Total number of downloads";
+    div.appendChild(img);
+
+    div.appendChild(document.createTextNode(" "));
+    img = document.createElement("img");
+    img.src = "https://cranlogs.r-pkg.org/badges/last-month/" + pkg;
+    img.alt = "Number of downloads during the last month";
+    div.appendChild(img);
+
+    div.appendChild(document.createTextNode(" "));
+    img = document.createElement("img");
+    img.src = "https://cranlogs.r-pkg.org/badges/last-week/" + pkg;
+    img.alt = "Number of downloads during the last week";
+    div.appendChild(img);
+}
+
 function cran_append_text(element, text) {
     var t = document.createTextNode(text);
     element.appendChild(t);
@@ -206,6 +233,7 @@ function cran_add_vignette_exts() {
     
 cran_inject_materials();
 cran_inject_maintainer();
+cran_inject_download_badges();
 cran_add_vignette_exts();
 cran_add_age();
 
