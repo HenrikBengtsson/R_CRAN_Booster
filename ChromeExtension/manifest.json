@@ -3,7 +3,7 @@
 
   "name": "R CRAN Booster",
 
-  "version": "0.0.0.9003",
+  "version": "0.0.0.9004",
 
   "description": "Injects links to related information to an R package CRAN page",
 
@@ -23,14 +23,14 @@
   "content_scripts": [
       {
           "matches": [
-	      "http://*.r-project.org/web/packages/*",
-	      "https://*.r-project.org/web/packages/*",
-	      "https://*.rstudio.com/web/packages/*"
-//	      "http://cran.*.edu/web/packages/*",
-//	      "https://cran.*.edu/web/packages/*"
-//	      "https://*/cran/web/packages/*",
-//	      "https://*/CRAN/web/packages/*",
-//	      "https://*/cranmirror/web/packages/*"
+	      "http://*.r-project.org/web/packages/*/index.html",
+	      "https://*.r-project.org/web/packages/*/index.html",
+	      "https://*.rstudio.com/web/packages/*/index.html"
+//	      "http://cran.*.edu/web/packages/*/index.html",
+//	      "https://cran.*.edu/web/packages//index.html*"
+//	      "https://*/cran/web/packages/*/index.html",
+//	      "https://*/CRAN/web/packages/*/index.html",
+//	      "https://*/cranmirror/web/packages//index.html*"
 	  ],
         "js": ["content-script.js"]
       }

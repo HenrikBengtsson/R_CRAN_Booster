@@ -1,6 +1,13 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
+## Version 0.0.0.9004 [2019-05-22]
+
+BUG FIXES:
+
+ * The extension applied itself also to some CRAN package page vignettes.
+ 
+
 ## Version 0.0.0.9003 [2019-05-19]
 
 NEW FEATURES:
