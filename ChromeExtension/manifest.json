@@ -24,8 +24,11 @@
       {
           "matches": [
 	      "http://*.r-project.org/web/packages/*/index.html",
+	      "http://*.r-project.org/web/packages/*/",
 	      "https://*.r-project.org/web/packages/*/index.html",
-	      "https://*.rstudio.com/web/packages/*/index.html"
+	      "https://*.r-project.org/web/packages/*/",
+        "https://*.rstudio.com/web/packages/*/index.html",
+	      "https://*.rstudio.com/web/packages/*/"
 //	      "http://cran.*.edu/web/packages/*/index.html",
 //	      "https://cran.*.edu/web/packages//index.html*"
 //	      "https://*/cran/web/packages/*/index.html",
