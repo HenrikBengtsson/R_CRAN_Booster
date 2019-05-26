@@ -1,6 +1,11 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
+## Version 0.0.1-9000 [2019-05-26]
+
+ * ...
+
+
 ## Version 0.0.1 [2019-05-26]
 
 SIGNIFICANT CHANGES:
