@@ -11,8 +11,8 @@ function cran_index_of_first_element(elements, pattern) {
     for (var i = 0; i < elements.length; i++) {
         element = elements[i];
         if (element.innerText.search(pattern) != -1) {
-	    return(i);
-	}
+            return(i);
+        }
     }
     return(-1);
 }
@@ -36,9 +36,9 @@ function cran_url() {
     var elements = document.head.getElementsByTagName("meta");
     for (var i=0; i < elements.length; i++) {
         element = elements[i];
-	if (element.getAttribute("name") == "citation_public_url") { 
+        if (element.getAttribute("name") == "citation_public_url") { 
             return(element.getAttribute("content"));
-	}
+        }
     }
 
     // Fallback: some package pages don't have the above meta tag.
@@ -75,7 +75,7 @@ function cran_inject_materials() {
         tr2.appendChild(td2);
         td2 = document.createElement('td');
         tr2.appendChild(td2);
-	tr.parentNode.insertBefore(tr2, tr.nextSibling);
+        tr.parentNode.insertBefore(tr2, tr.nextSibling);
         i = cran_index_of_first_element(elements, "Materials");
     }
     var element = elements[i+1];
