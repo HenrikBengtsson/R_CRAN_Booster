@@ -1,6 +1,14 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
+## Version 0.0.0.9005 [2019-05-26]
+
+BUG FIXES:
+
+ * Now applies to CRAN package page URLs ending with either packages/<pkg>/
+   or packages/<pkg>/index.html.
+
+
 ## Version 0.0.0.9004 [2019-05-22]
 
 BUG FIXES:
