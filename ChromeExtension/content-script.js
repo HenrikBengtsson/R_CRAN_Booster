@@ -183,7 +183,7 @@ function cran_inject_cran_checks() {
     
     element.appendChild(document.createTextNode(" macOS: "));
     img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/flavor/osx/" + pkg;
+    img.src = "https://cranchecks.info/badges/flavor/macos/" + pkg;
     img.alt = "CRAN check macOS results";
     element.appendChild(img);
     
