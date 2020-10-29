@@ -1,6 +1,14 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
+## Version 0.0.2 [2019-10-29]
+
+BUG FIXES:
+
+ * The macOS badge did no longer work because the URL was changed to use
+   'macos' instead of legacy 'osx'.
+
+
 ## Version 0.0.1 [2019-05-26]
 
 SIGNIFICANT CHANGES:

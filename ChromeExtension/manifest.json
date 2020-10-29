@@ -3,7 +3,7 @@
 
   "name": "R CRAN Booster",
 
-  "version": "0.0.1",
+  "version": "0.0.1.9000",
 
   "description": "Injects links to related information to an R package CRAN page",
 
