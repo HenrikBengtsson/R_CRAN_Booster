@@ -224,7 +224,10 @@ function cran_inject_download_badges() {
 }
 
 function cran_append_text(element, text) {
-    var t = document.createTextNode(text);
+    //    var t = document.createTextNode(text);
+    var t = document.createElement("span");
+    t.className = "aux";
+    t.innerText = text;
     element.appendChild(t);
 }
 
@@ -232,19 +235,20 @@ function cran_count(pattern) {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, pattern);
     if (i < 0) return(0);
+    var element_col1 = elements[i];
     var element = elements[i+1];
     var t = element.innerText;
     t = t.replace(/\[[^\]]*\]/g, '');
     t = t.replace(/\([^\)]*\)/g, '');
     var count = (t.match(/,/g) || []).length + 1;
-    cran_append_text(element, " (n = " + count + ")");
+    cran_append_text(element_col1, " (" + count + ")");
     return(count);
 }
 
 function cran_add_count(pattern, count) {
     var element = cran_find_h4(pattern);
     if (element == null) return;
-    cran_append_text(element, " (n = " + count + ")");
+    cran_append_text(element, " (" + count + ")");
 }
 
 
@@ -262,18 +266,20 @@ function cran_add_age() {
 }
 
 function cran_add_vignette_exts() {
-  var elements = document.body.getElementsByTagName("td");
-  var i = cran_index_of_first_element(elements, "Vignettes");
-  if (i < 0) return;
-  var element = elements[i+1];
-  var as = element.getElementsByTagName("a");
-  var ext, t; 
-  for (i = 0; i < as.length; i++) {
-    a = as[i];
-    ext = a.href.split('.').pop();
-    t = document.createTextNode(" (" + ext + ")");
-    a.parentNode.insertBefore(t, a.nextSibling);
-  }
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "Vignettes");
+    if (i < 0) return;
+    var element = elements[i+1];
+    var as = element.getElementsByTagName("a");
+    var ext, t; 
+    for (i = 0; i < as.length; i++) {
+	a = as[i];
+	ext = a.href.split('.').pop();
+        t = document.createElement("span");
+	t.className = "aux";
+	t.innerText = " (" + ext + ")";
+	a.parentNode.insertBefore(t, a.nextSibling);
+    }
 }
 
 function copy_install () {

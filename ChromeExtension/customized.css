@@ -121,3 +121,8 @@ input[type=text] {
     background-color: var(--background-color);
     color: var(--sec-color);
 }
+
+span.aux {
+    background: var(--background-color);
+    color: var(--sec-color);
+}
