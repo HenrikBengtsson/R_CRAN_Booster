@@ -111,3 +111,13 @@ span.pkg {
 span.samp {
     font-family: monospace;
 }
+
+button {
+    background-color: var(--sec-color);
+    color: var(--text-color);
+}
+
+input[type=text] {
+    background-color: var(--background-color);
+    color: var(--sec-color);
+}
