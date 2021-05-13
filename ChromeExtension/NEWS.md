@@ -1,10 +1,17 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
-## Version 0.0.2-9000 [2019-10-29]
+## Version 0.0.2-9001 [2021-05-13]
 
- * ...
+NEW FEATURES:
 
+ * Inject install.packages() instructions together with a 'Copy' button.
+
+ * Use a Dark mode theme if set in the operating system.
+ 
+ * Above features was added by Chung-hong Chan (@chainsawriot) and
+   originates from his https://github.com/chainsawriot/cranitup.
+ 
 
 ## Version 0.0.2 [2019-10-29]
 

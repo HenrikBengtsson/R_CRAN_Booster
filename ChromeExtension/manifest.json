@@ -3,7 +3,7 @@
 
   "name": "R CRAN Booster",
 
-  "version": "0.0.1.9000",
+  "version": "0.0.1.9001",
 
   "description": "Injects links to related information to an R package CRAN page",
 
@@ -42,6 +42,6 @@
 
   "page_action" : {
     "default_icon": "Rlogo_16x16.png",
-    "default_title": "The R CRAN Booster by Henrik Bengtsson"
+    "default_title": "The R CRAN Booster by Henrik Bengtsson & Chung-hong Chan"
   }
 }
