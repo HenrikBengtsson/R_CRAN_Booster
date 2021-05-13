@@ -275,7 +275,31 @@ function cran_add_vignette_exts() {
     a.parentNode.insertBefore(t, a.nextSibling);
   }
 }
-    
+
+function copy_install () {
+    // ref: https://stackoverflow.com/a/18455088
+    var cmd = "install.packages(\"" + cran_package()  + "\", dependencies = TRUE)";
+    var copyFrom = document.createElement("textarea");
+    copyFrom.textContent = cmd;
+    document.body.appendChild(copyFrom);
+    copyFrom.select();
+    document.execCommand('copy');
+    document.body.removeChild(copyFrom);
+}
+
+function cran_inject_install_section() {
+    var copy_button = document.createElement("button");
+    copy_button.innerText = "copy";
+    var br = document.createElement("br");
+    copy_button.onclick = copy_install;
+    var input_box = document.createElement("input");
+    input_box.type = 'text';
+    input_box.value = "install.packages(\"" + cran_package() + "\", dependencies = TRUE)";
+    input_box.size = 80;
+    document.body.querySelector('p').append(br, br, input_box, copy_button);
+    copy_button.focus()
+}
+
 cran_inject_materials();
 cran_inject_cran_checks();
 cran_inject_maintainer();
@@ -301,3 +325,4 @@ count = count + cran_count("Reverse.*enhances");
 cran_add_count("Reverse.*dependencies", count);
 
 cran_inject_other_urls();
+cran_inject_install_section();
