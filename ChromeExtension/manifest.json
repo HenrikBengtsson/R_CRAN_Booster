@@ -35,7 +35,8 @@
 //            "https://*/CRAN/web/packages/*/index.html",
 //            "https://*/cranmirror/web/packages//index.html*"
           ],
-        "js": ["content-script.js"]
+          "js": ["content-script.js"],
+	  "css": ["customized.css"]
       }
   ],
 
