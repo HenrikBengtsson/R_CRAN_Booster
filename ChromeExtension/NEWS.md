@@ -1,13 +1,18 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
-## Version 0.0.2-9001 [2021-05-13]
+## Version 0.0.2-9002 [2021-05-14]
 
 NEW FEATURES:
 
  * Inject install.packages() instructions together with a 'Copy' button.
 
- * Use a Dark mode theme if set in the operating system.
+ * STYLE: Use a Dark mode theme if set in the operating system.
+
+ * STYLE: Use secondary color for injected text, e.g. count, age, etc.
+
+ * STYLE: Injected counts are now appended to the section/entry label,
+   instead of at the end of the value.
  
  * Above features was added by Chung-hong Chan (@chainsawriot) and
    originates from his https://github.com/chainsawriot/cranitup.
