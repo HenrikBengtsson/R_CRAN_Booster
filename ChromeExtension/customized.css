@@ -4,7 +4,9 @@
 	--background-color: white;
 	--text-color: black;
 	--link-color: blue;
-	--sec-color: rgb(55%, 55%, 55%);
+	--sec-color: rgb(40%, 40%, 40%);
+	--aux-color: rgb(55%, 55%, 55%);
+
     }
 }
 
@@ -14,6 +16,7 @@
 	--text-color: white;
 	--link-color: #BB86FC;
 	--sec-color: #03DAC5;
+	--aux-color: #018786;
     }
 }
 
@@ -113,7 +116,7 @@ span.samp {
 }
 
 button {
-    background-color: var(--sec-color);
+    background-color: var(--aux-color);
     color: var(--text-color);
 }
 
@@ -124,5 +127,5 @@ input[type=text] {
 
 span.aux {
     background: var(--background-color);
-    color: var(--sec-color);
+    color: var(--aux-color);
 }
