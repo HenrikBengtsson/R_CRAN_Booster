@@ -282,11 +282,14 @@ function cran_add_vignette_exts() {
     }
 }
 
+function install_cmd() {
+    return "install.packages(\"" + cran_package()  + "\", dependencies = TRUE)";
+}
+
 function copy_install() {
     // ref: https://stackoverflow.com/a/18455088
-    var cmd = "install.packages(\"" + cran_package()  + "\", dependencies = TRUE)";
     var copyFrom = document.createElement("textarea");
-    copyFrom.textContent = cmd;
+    copyFrom.textContent = install_cmd();
     document.body.appendChild(copyFrom);
     copyFrom.select();
     document.execCommand('copy');
@@ -300,8 +303,9 @@ function cran_inject_install_section() {
     copy_button.onclick = copy_install;
     var input_box = document.createElement("input");
     input_box.type = 'text';
-    input_box.value = "install.packages(\"" + cran_package() + "\", dependencies = TRUE)";
+    input_box.value = install_cmd();
     input_box.size = 60;
+    input_box.style = "font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace;"
     
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "Old.*sources");

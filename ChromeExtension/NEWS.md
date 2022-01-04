@@ -3,9 +3,13 @@ Chrome Extension: R_CRAN_Booster
 
 ## Version 0.0.2-9003 [2022-01-04]
 
-CLEANUP:
+NEW FEATURES:
 
- * Moved "install" form to the 'Downloads' section.
+ * Moved the install.packages() command to the 'Downloads' section.
+
+ * Use a monospace font for the install.packages() command.
+
+CLEANUP:
 
  * Removed 'Solaris' badge, since CRAN no longer checks on that platform.
 
