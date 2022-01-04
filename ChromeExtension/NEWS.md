@@ -9,6 +9,8 @@ NEW FEATURES:
 
  * Use a monospace font for the install.packages() command.
 
+ * Add link to package documentation on rdrr.io.
+
 CLEANUP:
 
  * Removed 'Solaris' badge, since CRAN no longer checks on that platform.
