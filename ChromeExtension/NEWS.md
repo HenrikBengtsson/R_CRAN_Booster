@@ -5,6 +5,8 @@ Chrome Extension: R_CRAN_Booster
 
 CLEANUP:
 
+ * Moved "install" form to the 'Downloads' section.
+
  * Removed 'Solaris' badge, since CRAN no longer checks on that platform.
 
 

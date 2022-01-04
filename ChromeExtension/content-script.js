@@ -282,7 +282,7 @@ function cran_add_vignette_exts() {
     }
 }
 
-function copy_install () {
+function copy_install() {
     // ref: https://stackoverflow.com/a/18455088
     var cmd = "install.packages(\"" + cran_package()  + "\", dependencies = TRUE)";
     var copyFrom = document.createElement("textarea");
@@ -301,9 +301,20 @@ function cran_inject_install_section() {
     var input_box = document.createElement("input");
     input_box.type = 'text';
     input_box.value = "install.packages(\"" + cran_package() + "\", dependencies = TRUE)";
-    input_box.size = 80;
-    document.body.querySelector('p').append(br, br, input_box, copy_button);
-    copy_button.focus()
+    input_box.size = 60;
+    
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "Old.*sources");
+    var td = elements[i];
+    var tr = td.parentNode;
+    var tbody = tr.parentNode;
+    var table = tbody.parentNode;
+    var div = document.createElement("div");
+    table.after(div);    
+    div.appendChild(br);
+    div.appendChild(input_box);
+    div.appendChild(copy_button);
+    copy_button.focus();
 }
 
 cran_inject_materials();
