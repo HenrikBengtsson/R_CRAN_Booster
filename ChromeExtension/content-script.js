@@ -175,11 +175,11 @@ function cran_inject_cran_checks() {
     img.alt = "CRAN check Linux results";
     element.appendChild(img);
     
-    element.appendChild(document.createTextNode(" Solaris: "));
-    img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/flavor/solaris/" + pkg;
-    img.alt = "CRAN check Solaris results";
-    element.appendChild(img);
+//    element.appendChild(document.createTextNode(" Solaris: "));
+//    img = document.createElement("img");
+//    img.src = "https://cranchecks.info/badges/flavor/solaris/" + pkg;
+//    img.alt = "CRAN check Solaris results";
+//    element.appendChild(img);
     
     element.appendChild(document.createTextNode(" macOS: "));
     img = document.createElement("img");

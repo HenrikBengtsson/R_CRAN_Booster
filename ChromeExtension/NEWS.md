@@ -1,6 +1,13 @@
 Chrome Extension: R_CRAN_Booster
 ================================
 
+## Version 0.0.2-9003 [2022-01-04]
+
+CLEANUP:
+
+ * Removed 'Solaris' badge, since CRAN no longer checks on that platform.
+
+
 ## Version 0.0.2-9002 [2021-05-14]
 
 NEW FEATURES:
