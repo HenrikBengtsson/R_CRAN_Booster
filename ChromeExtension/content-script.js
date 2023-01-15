@@ -147,6 +147,14 @@ function cran_inject_other_urls() {
     a.title = "Package page on Microsoft MRAN";
     td.appendChild(a);
 
+    td.appendChild(document.createElement("br"));
+    a = document.createElement("a");
+    url = "https://rdrr.io/cran/" + pkg;
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on rdrr.io";
+    td.appendChild(a);
+
     tr2.appendChild(td);
     table.appendChild(tr2);
 }
@@ -159,37 +167,37 @@ function cran_inject_cran_checks() {
     
 //    element.appendChild(document.createTextNode(" "));
 //    img = document.createElement("img");
-//    img.src = "https://cranchecks.info/badges/summary/" + pkg;
+//    img.src = "https://badges.cranchecks.info/summary/" + pkg + ".svg";
 //    img.alt = "CRAN check summary";
 //    element.appendChild(img);
     
     element.appendChild(document.createTextNode(" "));
     img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/worst/" + pkg;
+    img.src = "https://badges.cranchecks.info/worst/" + pkg + ".svg";
     img.alt = "CRAN check worst result";
     element.appendChild(img);
     
     element.appendChild(document.createTextNode(" (Linux: "));
     img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/flavor/linux/" + pkg;
+    img.src = "https://badges.cranchecks.info/flavor/linux/" + pkg + ".svg";
     img.alt = "CRAN check Linux results";
     element.appendChild(img);
     
-    element.appendChild(document.createTextNode(" Solaris: "));
-    img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/flavor/solaris/" + pkg;
-    img.alt = "CRAN check Solaris results";
-    element.appendChild(img);
+//    element.appendChild(document.createTextNode(" Solaris: "));
+//    img = document.createElement("img");
+//    img.src = "https://badges.cranchecks.info/flavor/solaris/" + pkg + ".svg";
+//    img.alt = "CRAN check Solaris results";
+//    element.appendChild(img);
     
     element.appendChild(document.createTextNode(" macOS: "));
     img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/flavor/macos/" + pkg;
+    img.src = "https://badges.cranchecks.info/flavor/macos/" + pkg + ".svg";
     img.alt = "CRAN check macOS results";
     element.appendChild(img);
     
     element.appendChild(document.createTextNode(" Windows: "));
     img = document.createElement("img");
-    img.src = "https://cranchecks.info/badges/flavor/windows/" + pkg;
+    img.src = "https://badges.cranchecks.info/flavor/windows/" + pkg + ".svg";
     img.alt = "CRAN check Windows results";
     element.appendChild(img);
     
@@ -224,7 +232,10 @@ function cran_inject_download_badges() {
 }
 
 function cran_append_text(element, text) {
-    var t = document.createTextNode(text);
+    //    var t = document.createTextNode(text);
+    var t = document.createElement("span");
+    t.className = "aux";
+    t.innerText = text;
     element.appendChild(t);
 }
 
@@ -232,19 +243,20 @@ function cran_count(pattern) {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, pattern);
     if (i < 0) return(0);
+    var element_col1 = elements[i];
     var element = elements[i+1];
     var t = element.innerText;
     t = t.replace(/\[[^\]]*\]/g, '');
     t = t.replace(/\([^\)]*\)/g, '');
     var count = (t.match(/,/g) || []).length + 1;
-    cran_append_text(element, " (n = " + count + ")");
+    cran_append_text(element_col1, " (" + count + ")");
     return(count);
 }
 
 function cran_add_count(pattern, count) {
     var element = cran_find_h4(pattern);
     if (element == null) return;
-    cran_append_text(element, " (n = " + count + ")");
+    cran_append_text(element, " (" + count + ")");
 }
 
 
@@ -262,20 +274,61 @@ function cran_add_age() {
 }
 
 function cran_add_vignette_exts() {
-  var elements = document.body.getElementsByTagName("td");
-  var i = cran_index_of_first_element(elements, "Vignettes");
-  if (i < 0) return;
-  var element = elements[i+1];
-  var as = element.getElementsByTagName("a");
-  var ext, t; 
-  for (i = 0; i < as.length; i++) {
-    a = as[i];
-    ext = a.href.split('.').pop();
-    t = document.createTextNode(" (" + ext + ")");
-    a.parentNode.insertBefore(t, a.nextSibling);
-  }
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "Vignettes");
+    if (i < 0) return;
+    var element = elements[i+1];
+    var as = element.getElementsByTagName("a");
+    var ext, t; 
+    for (i = 0; i < as.length; i++) {
+	a = as[i];
+	ext = a.href.split('.').pop();
+        t = document.createElement("span");
+	t.className = "aux";
+	t.innerText = " (" + ext + ")";
+	a.parentNode.insertBefore(t, a.nextSibling);
+    }
 }
+
+function install_cmd() {
+    return "install.packages(\"" + cran_package()  + "\", dependencies = TRUE)";
+}
+
+function copy_install() {
+    // ref: https://stackoverflow.com/a/18455088
+    var copyFrom = document.createElement("textarea");
+    copyFrom.textContent = install_cmd();
+    document.body.appendChild(copyFrom);
+    copyFrom.select();
+    document.execCommand('copy');
+    document.body.removeChild(copyFrom);
+}
+
+function cran_inject_install_section() {
+    var copy_button = document.createElement("button");
+    copy_button.innerText = "copy";
+    var br = document.createElement("br");
+    copy_button.onclick = copy_install;
+    var input_box = document.createElement("input");
+    input_box.type = 'text';
+    input_box.value = install_cmd();
+    input_box.size = 60;
+    input_box.style = "font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace;"
     
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "Old.*sources");
+    var td = elements[i];
+    var tr = td.parentNode;
+    var tbody = tr.parentNode;
+    var table = tbody.parentNode;
+    var div = document.createElement("div");
+    table.after(div);    
+    div.appendChild(br);
+    div.appendChild(input_box);
+    div.appendChild(copy_button);
+    copy_button.focus();
+}
+
 cran_inject_materials();
 cran_inject_cran_checks();
 cran_inject_maintainer();
@@ -301,3 +354,4 @@ count = count + cran_count("Reverse.*enhances");
 cran_add_count("Reverse.*dependencies", count);
 
 cran_inject_other_urls();
+cran_inject_install_section();
