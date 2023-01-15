@@ -1,21 +1,21 @@
-Chrome Extension: R_CRAN_Booster
-================================
+# Chrome Extension: R_CRAN_Booster
 
 ## Version 0.0.2-9004 [2023-01-15]
 
-NEW FEATURES:
+### New Features
 
- * Moved the install.packages() command to the 'Downloads' section.
+ * Moved the `install.packages()` command to the 'Downloads' section.
 
- * Use a monospace font for the install.packages() command.
+ * Use a monospace font for the `install.packages()` command.
 
  * Add link to package documentation on rdrr.io.
 
-CLEANUP:
+### Cleanup
 
- * Removed 'Solaris' badge, since CRAN no longer checks on that platform.
+ * Removed 'Solaris' badge, since CRAN no longer checks on that
+   platform.
 
-BUG FIXES:
+### Bug Fixes
 
  * The 'crancheck.info' badges were broken, because their URLs was
    changed during November 2022.
@@ -23,9 +23,10 @@ BUG FIXES:
 
 ## Version 0.0.2-9002 [2021-05-14]
 
-NEW FEATURES:
+### New Features
 
- * Inject install.packages() instructions together with a 'Copy' button.
+ * Inject `install.packages()` instructions together with a 'Copy'
+   button.
 
  * STYLE: Use a Dark mode theme if set in the operating system.
 
@@ -40,37 +41,38 @@ NEW FEATURES:
 
 ## Version 0.0.2 [2019-10-29]
 
-BUG FIXES:
+### Bug Fixes
 
- * The macOS badge did no longer work because the URL was changed to use
-   'macos' instead of legacy 'osx'.
+ * The macOS badge did no longer work because the URL was changed to
+   use 'macos' instead of legacy 'osx'.
 
 
 ## Version 0.0.1 [2019-05-26]
 
-SIGNIFICANT CHANGES:
+### Significant Changes
 
  * First public release.
  
 
 ## Version 0.0.0.9005 [2019-05-26]
 
-BUG FIXES:
+### Bug Fixes
 
- * Now applies to CRAN package page URLs ending with either packages/<pkg>/
-   or packages/<pkg>/index.html.
+ * Now applies to CRAN package page URLs ending with either
+   `packages/<pkg>/` or `packages/<pkg>/index.html`.
 
 
 ## Version 0.0.0.9004 [2019-05-22]
 
-BUG FIXES:
+### Bug Fixes
 
- * The extension applied itself also to some CRAN package page vignettes.
+ * The extension applied itself also to some CRAN package page
+   vignettes.
  
 
 ## Version 0.0.0.9003 [2019-05-19]
 
-NEW FEATURES:
+### New Features
 
  * Add badges to 'CRAN checks' section.
  
@@ -79,14 +81,14 @@ NEW FEATURES:
 
 ## Version 0.0.0.9002 [2019-05-19]
 
-NEW FEATURES:
+### New Features
 
  * Add 'Materials' link to Git CRAN mirror commits.
 
 
 ## Version 0.0.0.9001 [2017-04-01]
 
-NEW FEATURES:
+### New Features
 
  * Annotation direct and reverse dependency with package counts.
  
