@@ -83,8 +83,13 @@ function cran_inject_materials() {
     cran_append_a(element, '', 'DESCRIPTION', ' ', 'DESCRIPTION');
     //     cran_append_a(element, '', 'LICENSE', ' ', 'LICENSE');
     var pkg = cran_package();
+    element.appendChild(document.createTextNode("("));
     var url = "https://github.com/cran/" + pkg + "/commits/master";
-    cran_append_a(element, '(', 'commits', ') ', url);
+    cran_append_a(element, '', 'commits', '', url);
+    element.appendChild(document.createTextNode(", "));
+    url = "https://diffify.com/R/" + pkg;
+    cran_append_a(element, '', 'diffify', '', url);
+    element.appendChild(document.createTextNode(")"));
 }
 
 

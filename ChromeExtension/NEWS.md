@@ -1,5 +1,12 @@
 # Chrome Extension: R_CRAN_Booster
 
+## Version (development version)
+
+### New Features
+
+ * Add link to 'https://diffify.com/R/<pkg>/'.
+ 
+
 ## Version 0.1.0 [2023-01-15]
 
 ### New Features
