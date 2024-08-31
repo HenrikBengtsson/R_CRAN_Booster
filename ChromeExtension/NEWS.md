@@ -1,10 +1,15 @@
 # Chrome Extension: R_CRAN_Booster
 
-## Version (development version)
+## Version 0.1.1 [2024-08-31]
 
 ### New Features
 
  * Add link to 'https://diffify.com/R/<pkg>/'.
+
+### Bug Fixes
+
+ * The R Logo image files are now truly square. Required for Firefox
+   Add-ons.
  
 
 ## Version 0.1.0 [2023-01-15]
