@@ -31,29 +31,64 @@ function cran_append_a(dom, prefix, text, suffix, url) {
     return dom;
 }
 
+// Memoization cache
+var cache = {};
+
 function cran_url() {
+    var url;
+    url = cache.cran_url;
+    if (url !== undefined) return(url);
+    
+    url = window.location.href;
+    
     var element = null;
     var elements = document.head.getElementsByTagName("meta");
+
     for (var i=0; i < elements.length; i++) {
         element = elements[i];
-        if (element.getAttribute("name") == "citation_public_url") { 
-            return(element.getAttribute("content"));
+        if (element.getAttribute("name") == "DC.identifier") {
+            url = element.getAttribute("content");
+            break;
+        } else if (element.getAttribute("name") == "og:url") { 
+            url = element.getAttribute("content");
+            break;
+        } else if (element.getAttribute("name") == "citation_public_url") { 
+            url = element.getAttribute("content");
+            break;
         }
     }
 
-    // Fallback: some package pages don't have the above meta tag.
-    elements = document.getElementsByTagName("title");
-    if (elements.length == 0) return null;
+    // Return cannonical CRAN URL
+    url = url.replace(/\/web\/packages\//, '/package=');
+    url = url.replace(/index.html$/, '');
+    url = url.replace(/\/$/, '');
+
+    cache.cran_url = url;
     
-    element = elements[0];
-    var text = element.innerText;
-    text = text.replace(/CRAN: Package /, '')
-    text = text.replace(/CRAN - Package /, '')
-    return text;
+    return(url);
 }
 
 function cran_package() {
-    return(cran_url().replace(/.*package=/, ''));
+    var name;
+
+    name = cache.cran_package;
+    if (name !== undefined) return(name);
+    
+    let url = cran_url();
+
+    if (url !== null) {
+        name = url.replace(/.*package=/, '');
+    } else {
+        // Fallback; infer from page title, if URL cannot be identified
+        elements = document.getElementsByTagName("title");
+        element = elements[0];
+        name = element.innerText;
+        name = name.replace(/CRAN\s*(:|-)\s*Package\s*/, '')
+    }
+
+    cache.cran_package = name;
+    
+    return(name);
 }
 
 function cran_find_h4(pattern) {
