@@ -130,22 +130,6 @@ function cran_inject_other_urls() {
 
     td.appendChild(document.createElement("br"));
     a = document.createElement("a");
-    url = "https://www.rdocumentation.org/packages/" + pkg;
-    a.innerText = url;
-    a.href = url;
-    a.title = "Package page on RDocumentation";
-    td.appendChild(a);
-    
-    td.appendChild(document.createElement("br"));
-    a = document.createElement("a");
-    url = "https://libraries.io/cran/" + pkg;
-    a.innerText = url;
-    a.href = url;
-    a.title = "Package page on Libraries.io";
-    td.appendChild(a);
-
-    td.appendChild(document.createElement("br"));
-    a = document.createElement("a");
     url = "https://rdrr.io/cran/" + pkg;
     a.innerText = url;
     a.href = url;

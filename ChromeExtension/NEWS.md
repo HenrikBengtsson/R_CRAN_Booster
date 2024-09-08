@@ -2,7 +2,11 @@
 
 ## Version (development version)
 
+### Cleanup
+
  * Drop link to MRAN documentation; it was shutdown on 2023-07-01.
+
+ * Drop link to Rdocumentation.org and Libraries.io documentation.
 
 
 ## Version 0.1.1 [2024-08-31]
