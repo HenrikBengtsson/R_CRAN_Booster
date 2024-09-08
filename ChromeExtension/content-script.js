@@ -46,7 +46,10 @@ function cran_url() {
     if (elements.length == 0) return null;
     
     element = elements[0];
-    return element.innerText.replace(/CRAN - Package /, '');
+    var text = element.innerText;
+    text = text.replace(/CRAN: Package /, '')
+    text = text.replace(/CRAN - Package /, '')
+    return text;
 }
 
 function cran_package() {
@@ -144,8 +147,30 @@ function cran_inject_cran_checks() {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "CRAN.*checks");
     var element = elements[i+1];
-    var pkg = cran_package();
+    let pkg = cran_package();
     
+    // Link to CRANhaven, if package has issues
+    let pattern = /issues need fixing before/;
+    var spans = element.querySelectorAll("span");
+    var span = Array.from(spans).find(x => pattern.test(x.textContent));
+    if (span !== undefined) {
+        var text = span.textContent.replace(/^\[|\]$/g, '');
+        let pattern = /\d{4}-\d{2}-\d{2}/;
+        var match = span.textContent.match(pattern);
+        if (match) {
+            var datestr = match[0];
+            var age = calculate_age(datestr);
+            text = text + " (" + age + ")";
+        }
+        let anchor = document.createElement("a");
+        anchor.href = "https://www.cranhaven.org/dashboard-at-risk.html";
+        anchor.textContent = "[" + text + "]";
+        span.parentNode.replaceChild(anchor, span);        
+    }   
+
+    element.appendChild(document.createTextNode(" "));
+    element.appendChild(document.createElement("br"));
+
 //    element.appendChild(document.createTextNode(" "));
 //    img = document.createElement("img");
 //    img.src = "https://badges.cranchecks.info/summary/" + pkg + ".svg";
@@ -241,17 +266,34 @@ function cran_add_count(pattern, count) {
 }
 
 
+function calculate_age(datestr) {
+    var date = Date.parse(datestr);
+    var today = new Date();
+    var days = Math.floor((today - date) / (24 * 60 * 60 * 1000));
+    var age = "today";
+    if (days > 0) {
+        if (days == +1) {
+            age = "1 day ago";
+        } else {
+            age = days + " days ago";
+        }
+    } else if (days < 0) {
+        if (days == -1) {
+            age = "in 1 day";
+        } else {
+            age = "in " + -days + " days";
+        }
+    }
+    return age;
+}
+
 function cran_add_age() {
-  var elements = document.body.getElementsByTagName("td");
-  var i = cran_index_of_first_element(elements, "Published");
-  if (i < 0) return;
-  var element = elements[i+1];
-  var today = new Date();
-  var date = Date.parse(element.innerText);
-  var days = Math.floor((today - date) / (24 * 60 * 60 * 1000));
-  var unit = "days";
-  if (days == 1) unit = "day";
-  cran_append_text(element, " (" + days + " " + unit + " ago)");
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "Published");
+    if (i < 0) return;
+    var element = elements[i+1];
+    var age = calculate_age(element.innerText);
+    cran_append_text(element, " (" + age + ")");
 }
 
 function cran_add_vignette_exts() {

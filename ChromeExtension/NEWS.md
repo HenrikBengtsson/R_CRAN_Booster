@@ -2,6 +2,10 @@
 
 ## Version (development version)
 
+### New Features
+
+ * Now linking to CRANhaven, if is an issue deadline.
+
 ### Cleanup
 
  * Drop link to MRAN documentation; it was shutdown on 2023-07-01.
