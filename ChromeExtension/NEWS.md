@@ -1,5 +1,10 @@
 # Chrome Extension: R_CRAN_Booster
 
+## Version (development version)
+
+ * Drop link to MRAN documentation; it was shutdown on 2023-07-01.
+
+
 ## Version 0.1.1 [2024-08-31]
 
 ### New Features

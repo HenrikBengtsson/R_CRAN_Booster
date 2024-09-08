@@ -146,14 +146,6 @@ function cran_inject_other_urls() {
 
     td.appendChild(document.createElement("br"));
     a = document.createElement("a");
-    url = "https://mran.microsoft.com/package/" + pkg;
-    a.innerText = url;
-    a.href = url;
-    a.title = "Package page on Microsoft MRAN";
-    td.appendChild(a);
-
-    td.appendChild(document.createElement("br"));
-    a = document.createElement("a");
     url = "https://rdrr.io/cran/" + pkg;
     a.innerText = url;
     a.href = url;
