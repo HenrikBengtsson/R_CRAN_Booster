@@ -465,14 +465,13 @@ function cran_inject_all() {
 
     cran_count("Author");
 
-    var count = 0;
-    count = count + cran_count("Depends");
-    count = count + cran_count("Imports");
-    count = count + cran_count("Suggests");
-    count = count + cran_count("Enhances");
-    count = count + cran_count("LinkingTo");
+    cran_count("Depends");
+    cran_count("Imports");
+    cran_count("Suggests");
+    cran_count("Enhances");
+    cran_count("LinkingTo");
 
-    count = 0;
+    var count = 0;
     count = count + cran_count("Reverse.*depends");
     count = count + cran_count("Reverse.*imports");
     count = count + cran_count("Reverse.*linking.*to");
