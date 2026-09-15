@@ -365,13 +365,12 @@ function copy_install() {
 function cran_inject_install_section() {
     var copy_button = document.createElement("button");
     copy_button.innerText = "copy";
-    var br = document.createElement("br");
     copy_button.onclick = copy_install;
     var input_box = document.createElement("input");
     input_box.type = 'text';
     input_box.value = install_cmd();
+    /* Width on wide screens; 'customized.css' shrinks it on narrow ones */
     input_box.size = 60;
-    input_box.style = "font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace;"
     
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "Old.*sources");
@@ -380,8 +379,8 @@ function cran_inject_install_section() {
     var tbody = tr.parentNode;
     var table = tbody.parentNode;
     var div = document.createElement("div");
+    div.className = "rcb-install";
     table.after(div);    
-    div.appendChild(br);
     div.appendChild(input_box);
     div.appendChild(copy_button);
     copy_button.focus();

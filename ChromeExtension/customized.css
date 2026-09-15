@@ -251,3 +251,26 @@ span.aux {
     opacity: 0.5;
     cursor: default;
 }
+
+/*
+ * The injected install.packages() command.  The text field is 60
+ * characters wide, but it must be allowed to shrink, or else it makes
+ * the page wider than the screen on a narrow one, e.g. on a phone.
+ * Note that a flex item does not shrink below its intrinsic width
+ * unless 'min-width' says it may.
+ */
+div.rcb-install {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3em;
+    margin-top: 1em;
+}
+
+div.rcb-install input[type=text] {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-family: Consolas, Monaco, "Lucida Console", "Liberation Mono",
+                 "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+                 "Courier New", monospace;
+}

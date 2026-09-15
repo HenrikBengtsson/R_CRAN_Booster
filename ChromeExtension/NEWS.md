@@ -29,6 +29,15 @@
    canonical form.
    
 
+### Bug Fixes
+
+ * The injected `install.packages()` field was 60 characters wide also
+   when the screen was narrower than that, which made the whole page
+   wider than the screen, e.g. on Firefox for Android.  The field now
+   shrinks to fit, and the 'copy' button moves below it when there is
+   no room beside it.
+
+
 ## Version 0.2.0 [2024-09-08]
 
 ### New Features
