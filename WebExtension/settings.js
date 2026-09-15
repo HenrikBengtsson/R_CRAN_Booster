@@ -4,8 +4,9 @@
  * Injects a settings icon in the upper, right corner of the CRAN package
  * page.  Clicking it opens a popup, where one can control whether the
  * page should be enhanced at all, whether the URL bar should show the
- * canonical package URL, and which color mode ('system', 'light', or
- * 'dark') to use.  The color mode applies also when not enhancing.
+ * canonical package URL, whether long reverse-dependency lists should
+ * be collapsed, and which color mode ('system', 'light', or 'dark') to
+ * use.  The color mode applies also when not enhancing.
  *
  * The settings are stored with the extension, i.e. they apply to all
  * CRAN package pages, also on other CRAN mirrors.  Because reading the
@@ -21,7 +22,8 @@
 var RCB_DEFAULTS = {
     theme: "system",   /* 'system', 'light', or 'dark' */
     enabled: true,     /* should CRAN pages be enhanced? */
-    canonical: false   /* show the canonical URL in the URL bar? */
+    canonical: false,  /* show the canonical URL in the URL bar? */
+    collapse: true     /* collapse long reverse-dependency lists? */
 };
 var RCB_THEMES = ["system", "light", "dark"];
 var RCB_CACHE_PREFIX = "R_CRAN_Booster.";
@@ -260,12 +262,20 @@ function rcb_inject_settings(settings) {
         "'https://cran.r-project.org/package=KernSmooth', and link to " +
         "Bioconductor packages by their canonical URL",
         settings.canonical));
+    panel.appendChild(rcb_create_switch(
+        "collapse", "Collapse long lists",
+        "Show only the first few entries of a long reverse-dependency " +
+        "list, with a toggle for showing all of them",
+        settings.collapse));
 
-    /* The canonical URL is one of the injections, so it requires them */
+    /* These are injections themselves, so they require the injections */
     if (!settings.enabled) {
-        var canonical = panel.querySelector('input[name="rcb-canonical"]');
-        canonical.disabled = true;
-        canonical.parentNode.className += " rcb-disabled";
+        var keys = ["canonical", "collapse"];
+        for (var i = 0; i < keys.length; i++) {
+            var input = panel.querySelector('input[name="rcb-' + keys[i] + '"]');
+            input.disabled = true;
+            input.parentNode.className += " rcb-disabled";
+        }
     }
 
     var group = document.createElement("fieldset");

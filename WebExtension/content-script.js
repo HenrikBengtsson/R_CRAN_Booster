@@ -136,7 +136,21 @@ function cran_inject_maintainer() {
     var i = cran_index_of_first_element(elements, "Maintainer");
     if (i < 0) return;
     var element = elements[i+1];
-    var t = element.innerText;
+    var t = trimString(element.innerText);
+
+    /* An orphaned package has no maintainer, and CRAN then gives the
+       field as 'ORPHANED', without an email address.  Highlight it,
+       instead of parsing it as a name and an email address. */
+    if (t.indexOf('<') < 0) {
+        var span = document.createElement("span");
+        span.className = "rcb-orphaned";
+        span.innerText = t;
+        span.title = "This package is orphaned, i.e. it has no maintainer";
+        element.innerText = "";
+        element.appendChild(span);
+        return;
+    }
+
     var name = t.replace(/<.*/, '');
     var email = t.replace(/.*</, '').replace(/>.*/, '').replace(/ at /, '@');
     element.innerText = name;
@@ -301,6 +315,70 @@ function cran_add_count(pattern, count) {
 }
 
 
+/*
+ * A reverse-dependency list can hold hundreds of packages, which makes
+ * the page hard to navigate.  Collapse such a list to its first
+ * RCB_COLLAPSE_MAX entries, and add a toggle for showing all of them.
+ */
+var RCB_COLLAPSE_MAX = 10;
+
+function cran_collapse_list(element) {
+    var as = element.getElementsByTagName("a");
+    var total = as.length;
+    if (total <= RCB_COLLAPSE_MAX) return;
+
+    /* Hide from the first entry too many, including the comma that
+       separates it from the entry before it */
+    var first = as[RCB_COLLAPSE_MAX];
+    var previous = first.previousSibling;
+    if (previous !== null && previous.nodeType === Node.TEXT_NODE) {
+        first = previous;
+    }
+
+    var rest = document.createElement("span");
+    rest.className = "rcb-rest";
+    rest.hidden = true;
+    element.insertBefore(rest, first);
+    while (rest.nextSibling !== null) {
+        rest.appendChild(rest.nextSibling);
+    }
+
+    var toggle = document.createElement("a");
+    toggle.className = "rcb-toggle";
+    toggle.href = "#";
+    function update_toggle() {
+        if (rest.hidden) {
+            toggle.innerText = "... show all " + total;
+            toggle.title = "Show all " + total + " packages";
+        } else {
+            toggle.innerText = "show fewer";
+            toggle.title = "Show only the first " + RCB_COLLAPSE_MAX +
+                           " of " + total + " packages";
+        }
+    }
+    toggle.onclick = function(event) {
+        event.preventDefault();
+        rest.hidden = !rest.hidden;
+        update_toggle();
+    };
+    update_toggle();
+    element.appendChild(document.createTextNode(" "));
+    element.appendChild(toggle);
+}
+
+function cran_collapse_reverse_dependencies() {
+    var patterns = ["Reverse.*depends", "Reverse.*imports",
+                    "Reverse.*linking.*to", "Reverse.*suggests",
+                    "Reverse.*enhances"];
+    var elements = document.body.getElementsByTagName("td");
+    for (var i = 0; i < patterns.length; i++) {
+        var j = cran_index_of_first_element(elements, patterns[i]);
+        if (j < 0) continue;
+        cran_collapse_list(elements[j+1]);
+    }
+}
+
+
 function calculate_age(datestr) {
     var date = Date.parse(datestr);
     var today = new Date();
@@ -455,7 +533,9 @@ function cran_show_canonical_url() {
 }
 
 
-function cran_inject_all() {
+function cran_inject_all(settings) {
+    if (!settings) settings = { collapse: true };
+
     cran_inject_materials();
     cran_inject_cran_checks();
     cran_inject_maintainer();
@@ -479,6 +559,10 @@ function cran_inject_all() {
     count = count + cran_count("Reverse.*enhances");
     cran_add_count("Reverse.*dependencies", count);
 
+    /* Note: Must be done after the counting above, because the counts
+       are calculated from 'innerText', which excludes hidden entries */
+    if (settings.collapse) cran_collapse_reverse_dependencies();
+
     cran_inject_other_urls();
     cran_inject_install_section();
 }
@@ -490,7 +574,7 @@ function cran_inject_all() {
 if (typeof rcb_on_settings === "function") {
     rcb_on_settings(function(settings) {
         if (!settings.enabled) return;
-        cran_inject_all();
+        cran_inject_all(settings);
         if (settings.canonical) {
             cran_canonical_package_urls();
             /* Last, so that cran_url() has already seen the original URL */

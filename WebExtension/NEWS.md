@@ -28,8 +28,13 @@
    Bioconductor package links on the page are also rewritten to their
    canonical form.
 
+ * A reverse-dependency list with more than ten packages is now
+   collapsed to its first ten, with a 'show all <n>' toggle.
+
  * Add link to the package page on R-universe, which reports the
    package build status and system requirements per platform.
+
+ * Highlight "ORPHANED" for orphaned CRAN packages.
 
 ### Bug Fixes
 

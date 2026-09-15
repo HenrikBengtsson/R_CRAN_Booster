@@ -13,6 +13,7 @@
     --link-color: blue;
     --sec-color: rgb(40%, 40%, 40%);
     --aux-color: rgb(55%, 55%, 55%);
+    --warn-color: #B00020;
 }
 
 /* Dark mode, per the operating system, unless light mode was chosen */
@@ -23,6 +24,7 @@
 	--link-color: #BB86FC;
 	--sec-color: #03DAC5;
 	--aux-color: #018786;
+	--warn-color: #CF6679;
     }
 }
 
@@ -33,6 +35,7 @@
     --link-color: #BB86FC;
     --sec-color: #03DAC5;
     --aux-color: #018786;
+    --warn-color: #CF6679;
 }
 
 /*
@@ -150,6 +153,25 @@ input[type=text] {
 span.aux {
     background: var(--background-color);
     color: var(--aux-color);
+}
+
+/* The hidden tail of a collapsed reverse-dependency list, and its toggle */
+span.rcb-rest[hidden] {
+    display: none;
+}
+
+a.rcb-toggle {
+    background: var(--background-color);
+    color: var(--aux-color);
+    font-size: small;
+    white-space: nowrap;
+}
+
+/* The maintainer field of an orphaned package */
+span.rcb-orphaned {
+    background: var(--background-color);
+    color: var(--warn-color);
+    font-weight: bold;
 }
 
 
