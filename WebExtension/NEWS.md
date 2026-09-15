@@ -38,6 +38,11 @@
 
 ### Bug Fixes
 
+ * The injected `install.packages()` field was missing for a package
+   that has never been updated, e.g. a newly published one.  It was
+   positioned relative to the 'Old sources' row, which such a package
+   does not have.
+
  * The injected `install.packages()` field was 60 characters wide also
    when the screen was narrower than that, which made the whole page
    wider than the screen, e.g. on Firefox for Android.  The field now

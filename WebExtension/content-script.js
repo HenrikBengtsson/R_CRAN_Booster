@@ -450,12 +450,19 @@ function cran_inject_install_section() {
     /* Width on wide screens; 'customized.css' shrinks it on narrow ones */
     input_box.size = 60;
     
+    /* The field goes below the package's information table, so any row
+       of that table will do to find it.  Not every package has every
+       row, e.g. one that has never been updated has no 'Old sources'
+       row, whereas 'Version' is always there. */
     var elements = document.body.getElementsByTagName("td");
-    var i = cran_index_of_first_element(elements, "Old.*sources");
-    var td = elements[i];
-    var tr = td.parentNode;
-    var tbody = tr.parentNode;
-    var table = tbody.parentNode;
+    var labels = ["Old.*sources", "Version", "Published", "License"];
+    var i = -1;
+    for (var k = 0; k < labels.length && i < 0; k++) {
+        i = cran_index_of_first_element(elements, labels[k]);
+    }
+    if (i < 0) return;
+    var table = elements[i].closest("table");
+    if (table === null) return;
     var div = document.createElement("div");
     div.className = "rcb-install";
     table.after(div);    
