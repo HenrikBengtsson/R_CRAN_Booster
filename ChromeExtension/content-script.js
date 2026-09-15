@@ -387,29 +387,43 @@ function cran_inject_install_section() {
     copy_button.focus();
 }
 
-cran_inject_materials();
-cran_inject_cran_checks();
-cran_inject_maintainer();
-cran_inject_download_badges();
-cran_add_vignette_exts();
-cran_add_age();
+function cran_inject_all() {
+    cran_inject_materials();
+    cran_inject_cran_checks();
+    cran_inject_maintainer();
+    cran_inject_download_badges();
+    cran_add_vignette_exts();
+    cran_add_age();
 
-cran_count("Author");
+    cran_count("Author");
 
-var count = 0;
-count = count + cran_count("Depends");
-count = count + cran_count("Imports");
-count = count + cran_count("Suggests");
-count = count + cran_count("Enhances");
-count = count + cran_count("LinkingTo");
+    var count = 0;
+    count = count + cran_count("Depends");
+    count = count + cran_count("Imports");
+    count = count + cran_count("Suggests");
+    count = count + cran_count("Enhances");
+    count = count + cran_count("LinkingTo");
 
-count = 0;
-count = count + cran_count("Reverse.*depends");
-count = count + cran_count("Reverse.*imports");
-count = count + cran_count("Reverse.*linking.*to");
-count = count + cran_count("Reverse.*suggests");
-count = count + cran_count("Reverse.*enhances");
-cran_add_count("Reverse.*dependencies", count);
+    count = 0;
+    count = count + cran_count("Reverse.*depends");
+    count = count + cran_count("Reverse.*imports");
+    count = count + cran_count("Reverse.*linking.*to");
+    count = count + cran_count("Reverse.*suggests");
+    count = count + cran_count("Reverse.*enhances");
+    cran_add_count("Reverse.*dependencies", count);
 
-cran_inject_other_urls();
-cran_inject_install_section();
+    cran_inject_other_urls();
+    cran_inject_install_section();
+}
+
+
+/* Inject, unless disabled in the settings (see 'settings.js', which runs
+   first and shares the same scope).  The settings icon is injected there,
+   so that it remains available also when everything else is disabled. */
+if (typeof rcb_on_settings === "function") {
+    rcb_on_settings(function(settings) {
+        if (settings.enabled) cran_inject_all();
+    });
+} else {
+    cran_inject_all();
+}

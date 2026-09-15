@@ -8,8 +8,14 @@
    page.  Clicking it opens a settings popup, where the color mode can
    be set to 'System' (default), 'Light', or 'Dark'.  The 'System' mode
    works as before, i.e. it follows the operating-system preference.
-   The chosen mode is remembered and applies to all CRAN package pages,
-   also on other CRAN mirrors.
+   The chosen mode is remembered by the browser, so it survives also a
+   browser restart, and it applies to all CRAN package pages, also on
+   other CRAN mirrors.
+
+ * The settings popup has an option for turning off all injections into
+   the CRAN package pages.  When turned off, only the settings icon is
+   injected, so that they can be turned back on.  The color mode still
+   applies, i.e. CRAN pages stay in dark mode.  Toggling reloads the page.
 
 
 ## Version 0.2.0 [2024-09-08]

@@ -27,11 +27,25 @@ lint: build
 # access.  It has to be a non-hidden folder; the Snap cannot read folders
 # with a name that starts with a period.
 WEB_EXT_TMPDIR ?= $(HOME)/web-ext-tmp
+
+# Reuse one and the same Firefox profile every time, so that the
+# extension settings, which are stored with the browser, survive from one
+# 'make run' to the next.  Without this, 'web-ext' creates a throwaway
+# profile at each launch, and the settings always start out at their
+# defaults.  Use 'make run-clean' to start afresh.
+WEB_EXT_PROFILE ?= $(HOME)/web-ext-profile
+
 START_URL ?= https://cran.r-project.org/package=KernSmooth
 
 run:
 	mkdir -p "$(WEB_EXT_TMPDIR)"
-	TMPDIR="$(WEB_EXT_TMPDIR)" npx --yes web-ext run --start-url "$(START_URL)"
+	TMPDIR="$(WEB_EXT_TMPDIR)" npx --yes web-ext run --start-url "$(START_URL)" \
+	  --firefox-profile "$(WEB_EXT_PROFILE)" --profile-create-if-missing \
+	  --keep-profile-changes
+
+# Discard the profile used by 'make run', including the extension settings
+run-clean:
+	rm -rf "$(WEB_EXT_PROFILE)"
 
 # Run the extension in Firefox for Android on a USB-attached device.
 #

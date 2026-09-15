@@ -4,7 +4,7 @@
  * Injects a settings icon in the upper, right corner of the CRAN package
  * page.  Clicking it opens a popup, where one can control whether the
  * page should be enhanced at all, and which color mode ('system',
- * 'light', or 'dark') to use.
+ * 'light', or 'dark') to use.  The color mode applies in either case.
  *
  * The settings are stored with the extension, i.e. they apply to all
  * CRAN package pages, also on other CRAN mirrors.  Because reading the
@@ -123,9 +123,10 @@ function rcb_on_settings(callback) {
 }
 
 /**
- * Record the settings on the <html> element, where the style sheet picks
- * them up.  Color mode 'system' means follow the operating system, and
- * 'data-rcb-off' disables all styling of the CRAN page itself.
+ * Record the color mode on the <html> element, where the style sheet
+ * picks it up.  Mode 'system' means follow the operating system.  The
+ * color mode applies also when the injections are disabled, so that
+ * CRAN pages stay in dark mode.
  */
 function rcb_apply_settings(settings) {
     var root = document.documentElement;
@@ -133,11 +134,6 @@ function rcb_apply_settings(settings) {
         root.removeAttribute("data-rcb-theme");
     } else {
         root.setAttribute("data-rcb-theme", settings.theme);
-    }
-    if (settings.enabled) {
-        root.removeAttribute("data-rcb-off");
-    } else {
-        root.setAttribute("data-rcb-off", "");
     }
 }
 

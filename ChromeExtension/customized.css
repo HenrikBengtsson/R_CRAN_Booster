@@ -35,6 +35,13 @@
     --aux-color: #018786;
 }
 
+/*
+ * The below mirrors CRAN's own 'CRAN_web.css', with its hardcoded
+ * colors replaced by the color-mode variables above.  It is what puts
+ * the CRAN page in dark mode, so it applies also when the injections
+ * are disabled in the settings.
+ */
+
 body {
     background: var(--background-color);
     color: var(--text-color);
