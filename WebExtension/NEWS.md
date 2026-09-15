@@ -1,5 +1,10 @@
 # Web Extension: R_CRAN_Booster
 
+## Version (development version)
+
+ * ...
+ 
+
 ## Version 0.3.0 [2026-09-15]
 
 ### Significant Changes
