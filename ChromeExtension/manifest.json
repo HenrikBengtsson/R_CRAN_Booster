@@ -5,9 +5,11 @@
 
   "version": "0.3.0",
 
-  "description": "Injects additional information to an R package CRAN page",
+  "description": "Injects additional information into an R package CRAN page",
 
   "author": "Henrik Bengtsson",
+
+  "homepage_url": "https://github.com/HenrikBengtsson/R_CRAN_Booster",
 
   "browser_specific_settings": {
     "gecko": {
