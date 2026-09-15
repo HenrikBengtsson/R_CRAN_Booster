@@ -22,7 +22,7 @@
    applies, i.e. CRAN pages stay in dark mode.  Toggling reloads the page.
 
  * The settings popup has a 'Badges' group, where the 'CRAN checks',
-   'Downloads', and 'GitHub' badges can be turned on and off, one by
+   'Downloads', and 'GitHub/GitLab' badges can be turned on and off, one
    one. The badges, and only they, are fetched from other sites.
    
  * The settings popup has an option for using canonical URLs, which is
@@ -37,9 +37,10 @@
  * A reverse-dependency list with more than ten packages is now
    collapsed to its first ten, with a 'show all <n>' toggle.
 
- * Add badges for the package's GitHub repository, showing the last
-   commit and the number of open issues.  They come from shields.io,
-   and are therefore off by default.
+ * Add badges for the package's source repository, showing the last
+   commit and the number of open issues.  GitHub and GitLab are
+   recognized, the latter including self-hosted instances.  The badges
+   come from shields.io, and are therefore off by default.
 
  * Add link to the package page on R-universe, which reports the
    package build status and system requirements per platform.

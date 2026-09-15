@@ -193,13 +193,14 @@ function cran_inject_other_urls() {
 }
 
 /*
- * GitHub badges
+ * Source-repository badges
  *
  * A CRAN page describes the released version only.  These badges, from
  * <https://shields.io/>, describe the upstream development repository
  * instead: when it was last committed to, and how many issues are
  * open.  The repository is taken from the package's own 'URL' and
- * 'BugReports' fields.
+ * 'BugReports' fields.  GitHub and GitLab are recognized, the latter
+ * including self-hosted instances, e.g. 'gitlab.in2p3.fr'.
  *
  * Note: Unlike the other badges, these are requested from services
  * outside of the R community, which is why they are off by default.
@@ -211,19 +212,61 @@ function cran_inject_other_urls() {
  * workflow something else, or that has no workflow at all.
  */
 
-/* The '<owner>/<name>' of a GitHub repository URL, otherwise null */
-function cran_github_slug(url) {
-    var match = url.match(/^https?:\/\/(?:www\.)?github\.com\/([^\/#?]+)\/([^\/#?]+)/);
+/* GitLab sub-pages that are not part of the project path */
+var RCB_GITLAB_PAGES = ["issues", "merge_requests", "wikis", "pipelines",
+                        "releases", "tree", "blob", "activity"];
+
+/*
+ * The kind ('github' or 'gitlab'), host, project path, and URL of a
+ * source repository, otherwise null
+ */
+function cran_repo(url) {
+    var match = url.match(/^(https?):\/\/([^\/?#]+)\/([^?#]*)/);
     if (match === null) return null;
-    var owner = match[1];
-    var name = match[2].replace(/\.git$/, '');
-    /* Not a repository, e.g. 'github.com/orgs/<org>/repositories' */
-    if (owner === "orgs" || owner === "sponsors" || owner === "users") return null;
-    return owner + "/" + name;
+    var scheme = match[1];
+    var host = match[2].replace(/^www\./, '').toLowerCase();
+    var path = match[3];
+
+    var kind = null;
+    if (host === "github.com") {
+        kind = "github";
+    } else if (host === "gitlab.com" || /(^|\.)gitlab\./.test(host)) {
+        /* '<user>.gitlab.io' is a GitLab Pages site, not a repository */
+        if (/\.gitlab\.io$/.test(host)) return null;
+        kind = "gitlab";
+    } else {
+        return null;
+    }
+
+    /* Drop sub-pages, e.g. '<project>/-/issues' */
+    path = path.replace(/\/-\/.*$/, '');
+    path = path.replace(/\.git$/, '');
+    var parts = path.split('/').filter(function(part) { return part !== ""; });
+
+    if (kind === "github") {
+        /* Not a repository, e.g. 'github.com/orgs/<org>/repositories' */
+        if (["orgs", "sponsors", "users"].indexOf(parts[0]) >= 0) return null;
+        /* Always '<owner>/<name>', and never deeper */
+        if (parts.length < 2) return null;
+        parts = parts.slice(0, 2);
+    } else {
+        /* GitLab has subgroups, so the project path can be deeper, but
+           an old-style sub-page, e.g. '<project>/issues', is not part
+           of it */
+        while (parts.length > 2 &&
+               RCB_GITLAB_PAGES.indexOf(parts[parts.length - 1]) >= 0) {
+            parts.pop();
+        }
+        if (parts.length < 2) return null;
+    }
+
+    path = parts.join("/");
+    return { kind: kind, host: host, path: path,
+             url: scheme + "://" + host + "/" + path };
 }
 
-/* The package's GitHub repository, and the cell naming it, otherwise null */
-function cran_github_repo() {
+/* The package's source repository, and the cell naming it, otherwise null */
+function cran_package_repo() {
     var elements = document.body.getElementsByTagName("td");
     var labels = ["^URL", "^BugReports"];
     for (var k = 0; k < labels.length; k++) {
@@ -232,8 +275,8 @@ function cran_github_repo() {
         var element = elements[i+1];
         var as = element.getElementsByTagName("a");
         for (var j = 0; j < as.length; j++) {
-            var slug = cran_github_slug(as[j].href);
-            if (slug !== null) return { slug: slug, element: element };
+            var repo = cran_repo(as[j].href);
+            if (repo !== null) return { repo: repo, element: element };
         }
     }
     return null;
@@ -251,20 +294,36 @@ function cran_append_badge(element, src, alt, url) {
     element.appendChild(a);
 }
 
-function cran_inject_github_badges() {
-    var found = cran_github_repo();
+function cran_inject_repo_badges() {
+    var found = cran_package_repo();
     if (found === null) return;
-    var slug = found.slug;
+    var repo = found.repo;
     var element = found.element;
-    var shields = "https://img.shields.io/github/";
-    var github = "https://github.com/" + slug;
+    var gitlab = (repo.kind === "gitlab");
+    var label = gitlab ? "GitLab" : "GitHub";
+    var shields = "https://img.shields.io/" + repo.kind + "/";
+
+    /* Shields knows gitlab.com and github.com, but a self-hosted GitLab
+       instance has to be named */
+    var where = "";
+    if (gitlab && repo.host !== "gitlab.com") {
+        where = "?gitlab_url=" + encodeURIComponent("https://" + repo.host);
+    }
+
+    /* GitLab spells the sub-pages '/-/<page>', and its badge for the
+       number of open issues 'issues/open' */
+    var sub = gitlab ? "/-/" : "/";
 
     element.appendChild(document.createElement("br"));
-    cran_append_badge(element, shields + "last-commit/" + slug,
-                      "Last commit to the GitHub repository",
-                      github + "/commits/");
-    cran_append_badge(element, shields + "issues/" + slug,
-                      "Open issues on GitHub", github + "/issues");
+    cran_append_badge(element,
+                      shields + "last-commit/" + repo.path + where,
+                      "Last commit to the " + label + " repository",
+                      repo.url + sub + "commits/");
+    cran_append_badge(element,
+                      shields + (gitlab ? "issues/open/" : "issues/") +
+                      repo.path + where,
+                      "Open issues on " + label,
+                      repo.url + sub + "issues");
 }
 
 
@@ -627,7 +686,7 @@ function cran_show_canonical_url() {
 function cran_inject_all(settings) {
     if (!settings) {
         settings = { collapse: true, checks: true, downloads: true,
-                     github: false };
+                     repo: false };
     }
 
     cran_inject_materials();
@@ -659,7 +718,7 @@ function cran_inject_all(settings) {
     if (settings.collapse) cran_collapse_reverse_dependencies();
 
     cran_inject_other_urls();
-    if (settings.github) cran_inject_github_badges();
+    if (settings.repo) cran_inject_repo_badges();
     cran_inject_install_section();
 }
 

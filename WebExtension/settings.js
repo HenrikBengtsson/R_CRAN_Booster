@@ -32,7 +32,7 @@ var RCB_DEFAULTS = {
     collapse: true,    /* collapse long reverse-dependency lists? */
     checks: true,      /* show the 'R CMD check' status badges? */
     downloads: true,   /* show the download badges? */
-    github: false      /* show badges for the GitHub repository? */
+    repo: false        /* show badges for the source repository? */
 };
 var RCB_THEMES = ["system", "light", "dark"];
 var RCB_CACHE_PREFIX = "R_CRAN_Booster.";
@@ -332,15 +332,16 @@ function rcb_inject_settings(settings) {
         "downloads, as badges from cranlogs.r-pkg.org",
         settings.downloads));
     badges.appendChild(rcb_create_switch(
-        "github", "GitHub",
+        "repo", "GitHub/GitLab",
         "Show the last commit and the number of open issues of the " +
-        "package's GitHub repository, as badges from img.shields.io",
-        settings.github));
+        "package's source repository on GitHub or GitLab, as badges " +
+        "from img.shields.io",
+        settings.repo));
     panel.appendChild(badges);
 
     /* These are injections themselves, so they require the injections */
     if (!settings.enabled) {
-        var keys = ["canonical", "collapse", "checks", "downloads", "github"];
+        var keys = ["canonical", "collapse", "checks", "downloads", "repo"];
         for (var i = 0; i < keys.length; i++) {
             var input = panel.querySelector('input[name="rcb-' + keys[i] + '"]');
             input.disabled = true;
