@@ -192,6 +192,82 @@ function cran_inject_other_urls() {
     table.appendChild(tr2);
 }
 
+/*
+ * GitHub badges
+ *
+ * A CRAN page describes the released version only.  These badges, from
+ * <https://shields.io/>, describe the upstream development repository
+ * instead: when it was last committed to, and how many issues are
+ * open.  The repository is taken from the package's own 'URL' and
+ * 'BugReports' fields.
+ *
+ * Note: Unlike the other badges, these are requested from services
+ * outside of the R community, which is why they are off by default.
+ *
+ * Note: There is no badge for a GitHub Actions workflow, e.g.
+ * 'R CMD check'.  Such a badge needs the name of the workflow file,
+ * which cannot be known without asking GitHub, and a guess gives a
+ * 'repo or workflow not found' badge for every package that names its
+ * workflow something else, or that has no workflow at all.
+ */
+
+/* The '<owner>/<name>' of a GitHub repository URL, otherwise null */
+function cran_github_slug(url) {
+    var match = url.match(/^https?:\/\/(?:www\.)?github\.com\/([^\/#?]+)\/([^\/#?]+)/);
+    if (match === null) return null;
+    var owner = match[1];
+    var name = match[2].replace(/\.git$/, '');
+    /* Not a repository, e.g. 'github.com/orgs/<org>/repositories' */
+    if (owner === "orgs" || owner === "sponsors" || owner === "users") return null;
+    return owner + "/" + name;
+}
+
+/* The package's GitHub repository, and the cell naming it, otherwise null */
+function cran_github_repo() {
+    var elements = document.body.getElementsByTagName("td");
+    var labels = ["^URL", "^BugReports"];
+    for (var k = 0; k < labels.length; k++) {
+        var i = cran_index_of_first_element(elements, labels[k]);
+        if (i < 0) continue;
+        var element = elements[i+1];
+        var as = element.getElementsByTagName("a");
+        for (var j = 0; j < as.length; j++) {
+            var slug = cran_github_slug(as[j].href);
+            if (slug !== null) return { slug: slug, element: element };
+        }
+    }
+    return null;
+}
+
+function cran_append_badge(element, src, alt, url) {
+    var img = document.createElement("img");
+    img.src = src;
+    img.alt = alt;
+    var a = document.createElement("a");
+    a.href = url;
+    a.title = alt;
+    a.appendChild(img);
+    element.appendChild(document.createTextNode(" "));
+    element.appendChild(a);
+}
+
+function cran_inject_github_badges() {
+    var found = cran_github_repo();
+    if (found === null) return;
+    var slug = found.slug;
+    var element = found.element;
+    var shields = "https://img.shields.io/github/";
+    var github = "https://github.com/" + slug;
+
+    element.appendChild(document.createElement("br"));
+    cran_append_badge(element, shields + "last-commit/" + slug,
+                      "Last commit to the GitHub repository",
+                      github + "/commits/");
+    cran_append_badge(element, shields + "issues/" + slug,
+                      "Open issues on GitHub", github + "/issues");
+}
+
+
 function cran_inject_cran_checks() {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "CRAN.*checks");
@@ -541,7 +617,7 @@ function cran_show_canonical_url() {
 
 
 function cran_inject_all(settings) {
-    if (!settings) settings = { collapse: true };
+    if (!settings) settings = { collapse: true, github: false };
 
     cran_inject_materials();
     cran_inject_cran_checks();
@@ -571,6 +647,7 @@ function cran_inject_all(settings) {
     if (settings.collapse) cran_collapse_reverse_dependencies();
 
     cran_inject_other_urls();
+    if (settings.github) cran_inject_github_badges();
     cran_inject_install_section();
 }
 

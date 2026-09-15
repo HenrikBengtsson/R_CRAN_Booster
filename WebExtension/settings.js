@@ -23,7 +23,8 @@ var RCB_DEFAULTS = {
     theme: "system",   /* 'system', 'light', or 'dark' */
     enabled: true,     /* should CRAN pages be enhanced? */
     canonical: false,  /* show the canonical URL in the URL bar? */
-    collapse: true     /* collapse long reverse-dependency lists? */
+    collapse: true,    /* collapse long reverse-dependency lists? */
+    github: false      /* show badges for the GitHub repository? */
 };
 var RCB_THEMES = ["system", "light", "dark"];
 var RCB_CACHE_PREFIX = "R_CRAN_Booster.";
@@ -267,10 +268,17 @@ function rcb_inject_settings(settings) {
         "Show only the first few entries of a long reverse-dependency " +
         "list, with a toggle for showing all of them",
         settings.collapse));
+    panel.appendChild(rcb_create_switch(
+        "github", "Show GitHub badges",
+        "Show the last commit and the number of open issues of the " +
+        "package's GitHub repository.  These badges are requested " +
+        "from shields.io, which then learns which package page you " +
+        "visit",
+        settings.github));
 
     /* These are injections themselves, so they require the injections */
     if (!settings.enabled) {
-        var keys = ["canonical", "collapse"];
+        var keys = ["canonical", "collapse", "github"];
         for (var i = 0; i < keys.length; i++) {
             var input = panel.querySelector('input[name="rcb-' + keys[i] + '"]');
             input.disabled = true;

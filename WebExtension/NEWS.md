@@ -36,6 +36,11 @@
 
  * Highlight "ORPHANED" for orphaned CRAN packages.
 
+ * Add badges for the package's GitHub repository, showing the last
+   commit and the number of open issues.  They come from shields.io,
+   and are therefore off by default; turn them on in the settings
+   popup.
+
 ### Bug Fixes
 
  * The injected `install.packages()` field was missing for a package
