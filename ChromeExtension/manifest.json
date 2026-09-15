@@ -3,11 +3,20 @@
 
   "name": "R CRAN Booster",
 
-  "version": "0.2.0",
+  "version": "0.2.1",
 
   "description": "Injects links to related information to an R package CRAN page",
 
   "author": "Henrik Bengtsson",
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{319a9cf5-982d-4a88-a9e3-05c4596582b0}",
+      "data_collection_permissions": {
+        "required": ["browsingActivity"]
+      }
+    }
+  },
 
   "icons": {
      "16": "Rlogo_16x16.png",
