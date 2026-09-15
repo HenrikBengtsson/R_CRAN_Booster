@@ -37,6 +37,11 @@
    shrinks to fit, and the 'copy' button moves below it when there is
    no room beside it.
 
+### Cleanup
+
+ * Drop link to the package documentation on rdrr.io; the site now
+   shows ads.
+
 
 ## Version 0.2.0 [2024-09-08]
 

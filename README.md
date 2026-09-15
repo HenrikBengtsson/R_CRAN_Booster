@@ -1,5 +1,10 @@
 # R CRAN Booster
 
+[![Firefox Add-ons version](https://img.shields.io/amo/v/r-cran-booster)](https://addons.mozilla.org/en-US/firefox/addon/r-cran-booster/)
+[![Firefox Add-ons users](https://img.shields.io/amo/users/r-cran-booster)](https://addons.mozilla.org/en-US/firefox/addon/r-cran-booster/)
+[![Firefox Add-ons rating](https://img.shields.io/amo/stars/r-cran-booster)](https://addons.mozilla.org/en-US/firefox/addon/r-cran-booster/reviews/)
+[![License: LGPL (>= 3)](https://img.shields.io/badge/license-LGPL%20(%3E%3D%203)-blue)](https://www.gnu.org/licenses/lgpl.txt)
+
 'R CRAN Booster' is a Firefox browser extension that enhances the browsing experience on [The R Project](https://www.r-project.org)'s [CRAN](https://cran.r-project.org/) package pages.  It runs on Firefox 140 or later on the desktop, and on Firefox 142 or later on Android.  It does _not_ work on Google Chrome.
 
 <img src="screenshot-with.png" style="border: solid 1px black" alt="Screenshot showing the CRAN page for the 'KernSmooth' package with 'R CMD check' status badges injected next to the 'CRAN checks' entry, download statistics badges injected at the top of the 'Downloads' section, an 'install.packages()' field with a 'copy' button, author, dependency, and reverse-dependency counts, the number of days since the version was published, and a settings icon in the upper, right corner"/>
