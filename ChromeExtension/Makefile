@@ -1,11 +1,11 @@
 spelling:
-	Rscript -e "spelling::spell_check_files('NEWS.md')"
+	Rscript -e "spelling::spell_check_files('NEWS.md', ignore=readLines('WORDLIST'))"
 
 build: spelling
-	web-ext build --overwrite-dest
+	npx --yes web-ext build --overwrite-dest
 
 lint: build
-	addons-linter web-ext-artifacts/*.zip
+	npx --yes addons-linter web-ext-artifacts/*.zip
 
 Rlogo.svg:
 	wget https://www.r-project.org/logo/Rlogo.svg
