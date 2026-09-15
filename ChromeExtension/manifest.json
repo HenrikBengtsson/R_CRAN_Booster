@@ -5,7 +5,7 @@
 
   "version": "0.2.1",
 
-  "description": "Injects links to related information to an R package CRAN page",
+  "description": "Injects additional information to an R package CRAN page",
 
   "author": "Henrik Bengtsson",
 
