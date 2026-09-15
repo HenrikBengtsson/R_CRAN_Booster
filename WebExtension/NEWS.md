@@ -27,7 +27,9 @@
    so that it is what is copied and bookmarked. The CRAN and
    Bioconductor package links on the page are also rewritten to their
    canonical form.
-   
+
+ * Add link to the package page on R-universe, which reports the
+   package build status and system requirements per platform.
 
 ### Bug Fixes
 

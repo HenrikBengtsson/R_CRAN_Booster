@@ -166,6 +166,14 @@ function cran_inject_other_urls() {
     a.title = "Package page on METACRAN";
     td.appendChild(a);
 
+    td.appendChild(document.createElement("br"));
+    a = document.createElement("a");
+    url = "https://cran.r-universe.dev/" + pkg;
+    a.innerText = url;
+    a.href = url;
+    a.title = "Package page on R-universe";
+    td.appendChild(a);
+
     tr2.appendChild(td);
     table.appendChild(tr2);
 }
