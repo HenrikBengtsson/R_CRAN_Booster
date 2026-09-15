@@ -16,6 +16,11 @@
  * allows us to apply them before the page is rendered, which avoids a
  * flash of the previous settings.
  *
+ * Changing a setting reloads the page, because the injections cannot be
+ * added or removed after the fact.  The panel is reopened afterwards,
+ * so that several settings can be changed in a row.  Clicking outside
+ * of the panel, or pressing Escape, closes it.
+ *
  * This script runs before 'content-script.js', which asks
  * 'rcb_on_settings()' whether it may inject anything at all.
  */
@@ -35,6 +40,9 @@ var RCB_CACHE_PREFIX = "R_CRAN_Booster.";
 /* The settings, once known, and the callbacks waiting for them */
 var rcb_settings = null;
 var rcb_settings_queue = [];
+
+/* The settings panel, once injected */
+var rcb_panel = null;
 
 
 function rcb_valid(key, value) {
@@ -145,8 +153,41 @@ function rcb_apply_settings(settings) {
     }
 }
 
-/* Injections cannot be undone, so the page has to be reloaded */
+/*
+ * Remember, across the reload below and only across it, that the panel
+ * was open.  It is 'sessionStorage', so that it is per browser tab, and
+ * the flag is cleared as soon as it has been read, so that it does not
+ * also reopen the panel on the next CRAN page visited in that tab.
+ */
+var RCB_PANEL_KEY = RCB_CACHE_PREFIX + "panel";
+
+function rcb_flag_panel_open() {
+    try {
+        window.sessionStorage.setItem(RCB_PANEL_KEY, "true");
+    } catch (error) {
+        /* 'sessionStorage' may be disabled; ignore */
+    }
+}
+
+/* Was the panel open when the page reloaded?  Asking clears the flag */
+function rcb_panel_was_open() {
+    var value = null;
+    try {
+        value = window.sessionStorage.getItem(RCB_PANEL_KEY);
+        window.sessionStorage.removeItem(RCB_PANEL_KEY);
+    } catch (error) {
+        /* 'sessionStorage' may be disabled; ignore */
+    }
+    return value === "true";
+}
+
+/*
+ * Injections cannot be undone, so the page has to be reloaded.  Reopen
+ * the panel afterwards, but only if it is open here; a setting changed
+ * in another tab reloads this page too, and should not open its panel.
+ */
 function rcb_reload() {
+    if (rcb_panel !== null && !rcb_panel.hidden) rcb_flag_panel_open();
     window.location.reload();
 }
 
@@ -245,6 +286,7 @@ function rcb_inject_settings(settings) {
     container.appendChild(toggle);
 
     var panel = document.createElement("div");
+    rcb_panel = panel;
     panel.id = "rcb-settings-panel";
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-label", "R CRAN Booster settings");
@@ -325,6 +367,9 @@ function rcb_inject_settings(settings) {
         event.preventDefault();
         open_panel(panel.hidden);
     };
+
+    /* Reopen the panel, if the page was reloaded by a setting change */
+    if (rcb_panel_was_open()) open_panel(true);
 
     /* Close when clicking outside of the settings, or pressing Escape */
     document.addEventListener("click", function(event) {
