@@ -7,7 +7,7 @@
 
 ## Installation
 
-To add this extension to Chrome, install it via Chrome menu 'More tools' -> 'Extensions'.  Then click 'Load unpacked', navigate to the 'R_CRAN_Booster/ChromeExtension' folder, and select 'Open'.  Done.
+To add this extension to Chrome, install it via Chrome menu 'More tools' -> 'Extensions'.  Then click 'Load unpacked', navigate to the 'R_CRAN_Booster/WebExtension' folder, and select 'Open'.  Done.
 
 ## License
 

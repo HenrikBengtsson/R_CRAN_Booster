@@ -2,8 +2,8 @@
 **/*~
 #*#
 web-ext-artifacts/
-ChromeExtension.crx
-ChromeExtension.pem
+WebExtension.crx
+WebExtension.pem
 */Rlogo.svg
 */Rlogo_724x724.png
 .osgrep
