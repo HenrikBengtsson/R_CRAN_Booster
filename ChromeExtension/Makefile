@@ -7,6 +7,32 @@ build: spelling
 lint: build
 	npx --yes addons-linter web-ext-artifacts/*.zip
 
+# Run the extension in the local Firefox installation.  This launches a
+# separate Firefox instance on a temporary profile, with the extension
+# installed temporarily, and reinstalls it whenever a file here changes.
+# It opens a CRAN package page, which can be set via 'START_URL', e.g.
+#
+#  $ make run START_URL=https://cran.r-project.org/package=future
+#
+# Alternatively, install it by hand in an already running Firefox: go to
+# 'about:debugging#/runtime/this-firefox', click 'Load Temporary Add-on...',
+# and select this folder's 'manifest.json'.  Note that a temporarily
+# installed extension is uninstalled when Firefox terminates.
+#
+# Note: A Firefox installed as a Snap, e.g. on Ubuntu, has its own,
+# private '/tmp', so it cannot load the temporary profile that 'web-ext'
+# creates there.  It fails with "Your Firefox profile cannot be loaded.
+# It may be missing or inaccessible."  To work around this, we create the
+# temporary profile below the home directory instead, which the Snap can
+# access.  It has to be a non-hidden folder; the Snap cannot read folders
+# with a name that starts with a period.
+WEB_EXT_TMPDIR ?= $(HOME)/web-ext-tmp
+START_URL ?= https://cran.r-project.org/package=KernSmooth
+
+run:
+	mkdir -p "$(WEB_EXT_TMPDIR)"
+	TMPDIR="$(WEB_EXT_TMPDIR)" npx --yes web-ext run --start-url "$(START_URL)"
+
 # Run the extension in Firefox for Android on a USB-attached device.
 #
 # One-off setup:
