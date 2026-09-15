@@ -1,13 +1,17 @@
 # R CRAN Booster
 
-'R CRAN Booster' is a Google Chrome browser extension that enhances the browsing experience on [The R Project](https://www.r-project.org)'s [CRAN](https://cran.r-project.org/) package pages.
+'R CRAN Booster' is a Firefox browser extension that enhances the browsing experience on [The R Project](https://www.r-project.org)'s [CRAN](https://cran.r-project.org/) package pages.  It runs on Firefox 140 or later on the desktop, and on Firefox 142 or later on Android.  It does _not_ work on Google Chrome.
 
 <img src="screenshot-with.png" style="border: solid 1px black" alt="Screenshot showing the CRAN page for the 'KernSmooth' package with 'R CMD check' status badges injected next to the 'CRAN checks' entry and download statistics badges injected at the top of the 'Download' section"/><br/>
 <small>Comment: Above screenshot is for an older version missing the injected installation instructions.</small>
 
 ## Installation
 
-To add this extension to Chrome, install it via Chrome menu 'More tools' -> 'Extensions'.  Then click 'Load unpacked', navigate to the 'R_CRAN_Booster/WebExtension' folder, and select 'Open'.  Done.
+Install the extension from Firefox Add-ons:
+
+* <https://addons.mozilla.org/en-US/firefox/addon/r-cran-booster/>
+
+To instead try out the development version, go to `about:debugging#/runtime/this-firefox` in Firefox, click 'Load Temporary Add-on...', and select the 'R_CRAN_Booster/WebExtension/manifest.json' file.  Note that a temporarily installed extension is uninstalled when Firefox terminates.
 
 ## License
 
