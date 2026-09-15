@@ -7,6 +7,42 @@ build: spelling
 lint: build
 	npx --yes addons-linter web-ext-artifacts/*.zip
 
+# Run the extension in Firefox for Android on a USB-attached device.
+#
+# One-off setup:
+#  1. Install the Android platform tools, so that 'adb' is on the PATH.
+#  2. On the device, enable 'USB debugging' under Developer options, and
+#     'Remote debugging via USB' under Firefox's Settings.
+#  3. Attach the device over USB and approve the debugging prompt.
+#
+# Then:
+#  $ make adb-devices                 # list attached devices
+#  $ make adb-firefox ADB_DEVICE=<id> # list Firefox editions on device <id>
+#  $ make run-android ADB_DEVICE=<id> # install and run on device <id>
+#
+# Set FIREFOX_APK to the edition reported by 'make adb-firefox', e.g.
+# org.mozilla.firefox_beta (Beta) or org.mozilla.fenix (Nightly).
+ADB_DEVICE ?=
+FIREFOX_APK ?= org.mozilla.firefox
+
+adb-devices:
+	adb devices -l
+
+require-adb-device:
+	@if [ -z "$(ADB_DEVICE)" ]; then \
+	  echo "ERROR: ADB_DEVICE is not set."; \
+	  echo "Usage: make <target> ADB_DEVICE=<id>   ('make adb-devices' lists them)"; \
+	  exit 1; \
+	fi
+
+adb-firefox: require-adb-device
+	adb -s "$(ADB_DEVICE)" shell pm list packages | grep -iE "mozilla|firefox" \
+	  || echo "(no Mozilla packages installed on $(ADB_DEVICE))"
+
+run-android: require-adb-device
+	npx --yes web-ext run --target firefox-android \
+	  --adb-device "$(ADB_DEVICE)" --firefox-apk "$(FIREFOX_APK)"
+
 Rlogo.svg:
 	wget https://www.r-project.org/logo/Rlogo.svg
 
