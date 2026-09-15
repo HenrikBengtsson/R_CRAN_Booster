@@ -30,10 +30,28 @@
 
   "permissions": [
     "contextMenus",
+    "storage",
     "tabs"
   ],
 
   "content_scripts": [
+      // The settings, including the color mode, are applied as early as
+      // possible, to avoid rendering the page in the wrong color mode
+      {
+          "matches": [
+              "http://*.r-project.org/web/packages/*/index.html",
+              "http://*.r-project.org/web/packages/*/",
+              "https://*.r-project.org/web/packages/*/index.html",
+              "https://*.r-project.org/web/packages/*/",
+              "https://*.rstudio.com/web/packages/*/index.html",
+              "https://*.rstudio.com/web/packages/*/"
+          ],
+          "js": ["settings.js"],
+          "css": ["customized.css"],
+          "run_at": "document_start"
+      },
+
+      // Note: Keep 'matches' in sync with the above
       {
           "matches": [
               "http://*.r-project.org/web/packages/*/index.html",
@@ -48,8 +66,7 @@
 //            "https://*/CRAN/web/packages/*/index.html",
 //            "https://*/cranmirror/web/packages//index.html*"
           ],
-          "js": ["content-script.js"],
-	  "css": ["customized.css"]
+          "js": ["content-script.js"]
       }
   ],
 

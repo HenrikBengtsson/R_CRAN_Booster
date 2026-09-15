@@ -1,23 +1,38 @@
 
-@media (prefers-color-scheme: light) {
-    :root {
-	--background-color: white;
-	--text-color: black;
-	--link-color: blue;
-	--sec-color: rgb(40%, 40%, 40%);
-	--aux-color: rgb(55%, 55%, 55%);
+/*
+ * Color modes: 'system' (default), 'light', and 'dark'.  A mode chosen
+ * in the settings popup is recorded as attribute 'data-rcb-theme' on
+ * the <html> element, where it overrides the operating-system
+ * preference.  Without that attribute, the operating system decides.
+ */
 
-    }
+/* Light mode; also the fallback, if the operating system has no preference */
+:root {
+    --background-color: white;
+    --text-color: black;
+    --link-color: blue;
+    --sec-color: rgb(40%, 40%, 40%);
+    --aux-color: rgb(55%, 55%, 55%);
 }
 
+/* Dark mode, per the operating system, unless light mode was chosen */
 @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-rcb-theme="light"]) {
 	--background-color: #121212;
 	--text-color: white;
 	--link-color: #BB86FC;
 	--sec-color: #03DAC5;
 	--aux-color: #018786;
     }
+}
+
+/* Dark mode, because it was chosen */
+:root[data-rcb-theme="dark"] {
+    --background-color: #121212;
+    --text-color: white;
+    --link-color: #BB86FC;
+    --sec-color: #03DAC5;
+    --aux-color: #018786;
 }
 
 body {
@@ -128,4 +143,99 @@ input[type=text] {
 span.aux {
     background: var(--background-color);
     color: var(--aux-color);
+}
+
+
+/* The settings icon and its popup in the upper, right corner */
+
+#rcb-settings {
+    position: fixed;
+    top: 0.5em;
+    right: 0.5em;
+    z-index: 2147483647;
+    font-family: sans-serif;
+    font-size: medium;
+    text-align: left;
+}
+
+#rcb-settings-toggle {
+    display: block;
+    padding: 0.25em;
+    line-height: 0;
+    cursor: pointer;
+    background: var(--background-color);
+    color: var(--sec-color);
+    border: 1px solid var(--aux-color);
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+#rcb-settings-toggle:hover,
+#rcb-settings-toggle:focus,
+#rcb-settings-toggle[aria-expanded="true"] {
+    opacity: 1.0;
+}
+
+#rcb-settings-toggle .rcb-gear {
+    fill: currentColor;
+}
+
+#rcb-settings-toggle .rcb-gear-hole {
+    fill: var(--background-color);
+}
+
+#rcb-settings-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.4em;
+    padding: 0.6em 0.8em 0.8em;
+    white-space: nowrap;
+    background: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--aux-color);
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+#rcb-settings-panel[hidden] {
+    display: none;
+}
+
+#rcb-settings-panel .rcb-title {
+    margin-bottom: 0.5em;
+    font-family: monospace;
+    font-weight: bold;
+    color: var(--sec-color);
+}
+
+#rcb-settings-panel .rcb-group {
+    margin: 0;
+    padding: 0.2em 0.6em 0.4em;
+    border: 1px solid var(--aux-color);
+    border-radius: 4px;
+}
+
+#rcb-settings-panel .rcb-group legend {
+    padding: 0 0.3em;
+    font-size: small;
+    color: var(--aux-color);
+}
+
+#rcb-settings-panel .rcb-option {
+    display: block;
+    padding: 0.15em 0;
+    cursor: pointer;
+}
+
+#rcb-settings-panel .rcb-option input {
+    margin-right: 0.2em;
+    vertical-align: middle;
+    accent-color: var(--link-color);
+}
+
+@media print {
+    #rcb-settings {
+	display: none;
+    }
 }

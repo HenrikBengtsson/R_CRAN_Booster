@@ -1,5 +1,17 @@
 # Chrome Extension: R_CRAN_Booster
 
+## Version 0.2.1 [2026-09-15]
+
+### New Features
+
+ * Add a settings icon to the upper, right corner of the CRAN package
+   page.  Clicking it opens a settings popup, where the color mode can
+   be set to 'System' (default), 'Light', or 'Dark'.  The 'System' mode
+   works as before, i.e. it follows the operating-system preference.
+   The chosen mode is remembered and applies to all CRAN package pages,
+   also on other CRAN mirrors.
+
+
 ## Version 0.2.0 [2024-09-08]
 
 ### New Features
