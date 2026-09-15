@@ -272,7 +272,6 @@ function cran_inject_cran_checks() {
     var elements = document.body.getElementsByTagName("td");
     var i = cran_index_of_first_element(elements, "CRAN.*checks");
     var element = elements[i+1];
-    let pkg = cran_package();
     
     // Link to CRANhaven, if package has issues
     let pattern = /issues need fixing before/;
@@ -292,6 +291,15 @@ function cran_inject_cran_checks() {
         anchor.textContent = "[" + text + "]";
         span.parentNode.replaceChild(anchor, span);        
     }   
+}
+
+/* The 'R CMD check' status badges, from <https://cranchecks.info/> */
+function cran_inject_check_badges() {
+    var elements = document.body.getElementsByTagName("td");
+    var i = cran_index_of_first_element(elements, "CRAN.*checks");
+    var element = elements[i+1];
+    let pkg = cran_package();
+    var img;
 
     element.appendChild(document.createTextNode(" "));
     element.appendChild(document.createElement("br"));
@@ -617,12 +625,16 @@ function cran_show_canonical_url() {
 
 
 function cran_inject_all(settings) {
-    if (!settings) settings = { collapse: true, github: false };
+    if (!settings) {
+        settings = { collapse: true, checks: true, downloads: true,
+                     github: false };
+    }
 
     cran_inject_materials();
     cran_inject_cran_checks();
+    if (settings.checks) cran_inject_check_badges();
     cran_inject_maintainer();
-    cran_inject_download_badges();
+    if (settings.downloads) cran_inject_download_badges();
     cran_add_vignette_exts();
     cran_add_age();
 

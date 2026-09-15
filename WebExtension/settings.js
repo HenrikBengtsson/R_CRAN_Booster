@@ -5,8 +5,9 @@
  * page.  Clicking it opens a popup, where one can control whether the
  * page should be enhanced at all, whether the URL bar should show the
  * canonical package URL, whether long reverse-dependency lists should
- * be collapsed, and which color mode ('system', 'light', or 'dark') to
- * use.  The color mode applies also when not enhancing.
+ * be collapsed, which badges to show, and which color mode ('system',
+ * 'light', or 'dark') to use.  The badges, and only they, are fetched
+ * from other sites.  The color mode applies also when not enhancing.
  *
  * The settings are stored with the extension, i.e. they apply to all
  * CRAN package pages, also on other CRAN mirrors.  Because reading the
@@ -24,6 +25,8 @@ var RCB_DEFAULTS = {
     enabled: true,     /* should CRAN pages be enhanced? */
     canonical: false,  /* show the canonical URL in the URL bar? */
     collapse: true,    /* collapse long reverse-dependency lists? */
+    checks: true,      /* show the 'R CMD check' status badges? */
+    downloads: true,   /* show the download badges? */
     github: false      /* show badges for the GitHub repository? */
 };
 var RCB_THEMES = ["system", "light", "dark"];
@@ -268,17 +271,34 @@ function rcb_inject_settings(settings) {
         "Show only the first few entries of a long reverse-dependency " +
         "list, with a toggle for showing all of them",
         settings.collapse));
-    panel.appendChild(rcb_create_switch(
-        "github", "Show GitHub badges",
+
+    /* The badges, and only they, are requested from other sites, which
+       then learn which package page is being visited */
+    var badges = document.createElement("fieldset");
+    badges.className = "rcb-group";
+    var badges_legend = document.createElement("legend");
+    badges_legend.innerText = "Badges";
+    badges.appendChild(badges_legend);
+    badges.appendChild(rcb_create_switch(
+        "checks", "CRAN checks",
+        "Show the 'R CMD check' status per platform, as badges from " +
+        "badges.cranchecks.info",
+        settings.checks));
+    badges.appendChild(rcb_create_switch(
+        "downloads", "Downloads",
+        "Show the total, last-month, and last-week number of " +
+        "downloads, as badges from cranlogs.r-pkg.org",
+        settings.downloads));
+    badges.appendChild(rcb_create_switch(
+        "github", "GitHub",
         "Show the last commit and the number of open issues of the " +
-        "package's GitHub repository.  These badges are requested " +
-        "from shields.io, which then learns which package page you " +
-        "visit",
+        "package's GitHub repository, as badges from img.shields.io",
         settings.github));
+    panel.appendChild(badges);
 
     /* These are injections themselves, so they require the injections */
     if (!settings.enabled) {
-        var keys = ["canonical", "collapse", "github"];
+        var keys = ["canonical", "collapse", "checks", "downloads", "github"];
         for (var i = 0; i < keys.length; i++) {
             var input = panel.querySelector('input[name="rcb-' + keys[i] + '"]');
             input.disabled = true;

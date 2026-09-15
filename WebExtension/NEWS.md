@@ -21,6 +21,10 @@
    injected, so that they can be turned back on.  The color mode still
    applies, i.e. CRAN pages stay in dark mode.  Toggling reloads the page.
 
+ * The settings popup has a 'Badges' group, where the 'CRAN checks',
+   'Downloads', and 'GitHub' badges can be turned on and off, one by
+   one. The badges, and only they, are fetched from other sites.
+   
  * The settings popup has an option for using canonical URLs, which is
    off by default.  When turned on, the URL bar shows the canonical
    package URL, e.g. `https://cran.r-project.org/package=KernSmooth`,
@@ -28,18 +32,17 @@
    Bioconductor package links on the page are also rewritten to their
    canonical form.
 
+ * Highlight "ORPHANED" for orphaned CRAN packages.
+ 
  * A reverse-dependency list with more than ten packages is now
    collapsed to its first ten, with a 'show all <n>' toggle.
 
- * Add link to the package page on R-universe, which reports the
-   package build status and system requirements per platform.
-
- * Highlight "ORPHANED" for orphaned CRAN packages.
-
  * Add badges for the package's GitHub repository, showing the last
    commit and the number of open issues.  They come from shields.io,
-   and are therefore off by default; turn them on in the settings
-   popup.
+   and are therefore off by default.
+
+ * Add link to the package page on R-universe, which reports the
+   package build status and system requirements per platform.
 
 ### Bug Fixes
 
