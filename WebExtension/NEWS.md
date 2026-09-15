@@ -5,7 +5,7 @@
 ### Significant Changes
 
  * Add support for Firefox on Android.
- 
+
 ### New Features
 
  * Add a settings icon to the upper, right corner of the CRAN package

@@ -25,9 +25,9 @@
   },
 
   "icons": {
-     "16": "Rlogo_16x16.png",
-     "48": "Rlogo_48x48.png",
-    "128": "Rlogo_128x128.png"
+     "16": "CRANlogo_16x16.png",
+     "48": "CRANlogo_48x48.png",
+    "128": "CRANlogo_128x128.png"
   },
 
   "permissions": [
@@ -71,7 +71,7 @@
   ],
 
   "page_action" : {
-    "default_icon": "Rlogo_16x16.png",
+    "default_icon": "CRANlogo_16x16.png",
     "default_title": "The R CRAN Booster by Henrik Bengtsson & Chung-hong Chan"
   }
 }

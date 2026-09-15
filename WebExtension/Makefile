@@ -1,8 +1,14 @@
 spelling:
 	Rscript -e "spelling::spell_check_files('NEWS.md', ignore=readLines('WORDLIST'))"
 
+# 'web-ext build' packs everything in this folder, because it knows
+# nothing about '.gitignore'.  Leave out the build scaffolding, so that
+# only the extension itself is shipped.  'NEWS.md' is kept, so that the
+# changelog travels with the extension.
 build: spelling
-	npx --yes web-ext build --overwrite-dest
+	npx --yes web-ext build --overwrite-dest \
+	  --ignore-files=Makefile --ignore-files=WORDLIST \
+	  --ignore-files=CRANlogo.png
 
 lint: build
 	npx --yes addons-linter web-ext-artifacts/*.zip
@@ -83,23 +89,21 @@ run-android: require-adb-device
 	npx --yes web-ext run --target firefox-android \
 	  --adb-device "$(ADB_DEVICE)" --firefox-apk "$(FIREFOX_APK)"
 
-Rlogo.svg:
-	wget https://www.r-project.org/logo/Rlogo.svg
+# The CRAN logo, which is already square (1000x1000), so it only has to
+# be downscaled
+CRANlogo.png:
+	wget https://cran.r-project.org/CRANlogo.png
 
-Rlogo_724x724.png: Rlogo.svg
-	convert "$<" -background white -gravity center -extent 724x724 "$@"
-	identify "$@" 
-
-Rlogo_128x128.png: Rlogo_724x724.png
+CRANlogo_128x128.png: CRANlogo.png
 	convert "$<" -resize 128x128 "$@"
-	identify "$@" 
+	identify "$@"
 
-Rlogo_48x48.png: Rlogo_724x724.png
+CRANlogo_48x48.png: CRANlogo.png
 	convert "$<" -resize 48x48 "$@"
-	identify "$@" 
+	identify "$@"
 
-Rlogo_16x16.png: Rlogo_724x724.png
+CRANlogo_16x16.png: CRANlogo.png
 	convert "$<" -resize 16x16 "$@"
-	identify "$@" 
+	identify "$@"
 
-r-logos: Rlogo_16x16.png Rlogo_48x48.png Rlogo_128x128.png
+r-logos: CRANlogo_16x16.png CRANlogo_48x48.png CRANlogo_128x128.png
