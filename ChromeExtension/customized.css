@@ -246,3 +246,8 @@ span.aux {
 	display: none;
     }
 }
+
+#rcb-settings-panel .rcb-option.rcb-disabled {
+    opacity: 0.5;
+    cursor: default;
+}

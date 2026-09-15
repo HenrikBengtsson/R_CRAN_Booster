@@ -3,8 +3,9 @@
  *
  * Injects a settings icon in the upper, right corner of the CRAN package
  * page.  Clicking it opens a popup, where one can control whether the
- * page should be enhanced at all, and which color mode ('system',
- * 'light', or 'dark') to use.  The color mode applies in either case.
+ * page should be enhanced at all, whether the URL bar should show the
+ * canonical package URL, and which color mode ('system', 'light', or
+ * 'dark') to use.  The color mode applies also when not enhancing.
  *
  * The settings are stored with the extension, i.e. they apply to all
  * CRAN package pages, also on other CRAN mirrors.  Because reading the
@@ -19,7 +20,8 @@
 
 var RCB_DEFAULTS = {
     theme: "system",   /* 'system', 'light', or 'dark' */
-    enabled: true      /* should CRAN pages be enhanced? */
+    enabled: true,     /* should CRAN pages be enhanced? */
+    canonical: false   /* show the canonical URL in the URL bar? */
 };
 var RCB_THEMES = ["system", "light", "dark"];
 var RCB_CACHE_PREFIX = "R_CRAN_Booster.";
@@ -34,10 +36,10 @@ function rcb_valid(key, value) {
         if (RCB_THEMES.indexOf(value) < 0) return RCB_DEFAULTS.theme;
         return value;
     }
-    if (key === "enabled") {
+    if (typeof RCB_DEFAULTS[key] === "boolean") {
         if (value === true || value === "true") return true;
         if (value === false || value === "false") return false;
-        return RCB_DEFAULTS.enabled;
+        return RCB_DEFAULTS[key];
     }
     return value;
 }
@@ -185,21 +187,21 @@ function rcb_create_gear_icon() {
     return svg;
 }
 
-function rcb_create_enabled_option(enabled) {
+function rcb_create_switch(key, label, title, checked) {
     var option = document.createElement("label");
     option.className = "rcb-option";
+    option.title = title;
     var input = document.createElement("input");
     input.type = "checkbox";
-    input.name = "rcb-enabled";
-    input.checked = enabled;
+    input.name = "rcb-" + key;
+    input.checked = checked;
     input.onchange = function() {
-        rcb_save_setting("enabled", input.checked);
+        rcb_save_setting(key, input.checked);
         /* Without extension storage, there is no change event to react to */
         if (rcb_storage() === null) rcb_reload();
     };
     option.appendChild(input);
-    option.appendChild(document.createTextNode(" Enhance CRAN pages"));
-    option.title = "Inject extra information and styling into CRAN package pages";
+    option.appendChild(document.createTextNode(" " + label));
     return option;
 }
 
@@ -248,7 +250,23 @@ function rcb_inject_settings(settings) {
     title.innerText = "R CRAN Booster";
     panel.appendChild(title);
 
-    panel.appendChild(rcb_create_enabled_option(settings.enabled));
+    panel.appendChild(rcb_create_switch(
+        "enabled", "Enhance CRAN pages",
+        "Inject extra information and styling into CRAN package pages",
+        settings.enabled));
+    panel.appendChild(rcb_create_switch(
+        "canonical", "Use canonical URLs",
+        "Show the short, canonical package URL in the URL bar, e.g. " +
+        "'https://cran.r-project.org/package=KernSmooth', and link to " +
+        "Bioconductor packages by their canonical URL",
+        settings.canonical));
+
+    /* The canonical URL is one of the injections, so it requires them */
+    if (!settings.enabled) {
+        var canonical = panel.querySelector('input[name="rcb-canonical"]');
+        canonical.disabled = true;
+        canonical.parentNode.className += " rcb-disabled";
+    }
 
     var group = document.createElement("fieldset");
     group.className = "rcb-group";
@@ -291,9 +309,14 @@ function rcb_watch_settings() {
     chrome.storage.onChanged.addListener(function(changes, area) {
         if (area !== "local") return;
 
-        if (changes.enabled) {
-            var enabled = rcb_valid("enabled", changes.enabled.newValue);
-            rcb_cache_setting("enabled", enabled);
+        /* Injections cannot be added or removed after the fact */
+        var reload = false;
+        for (var key in RCB_DEFAULTS) {
+            if (key === "theme" || !changes[key]) continue;
+            rcb_cache_setting(key, rcb_valid(key, changes[key].newValue));
+            reload = true;
+        }
+        if (reload) {
             rcb_reload();
             return;
         }

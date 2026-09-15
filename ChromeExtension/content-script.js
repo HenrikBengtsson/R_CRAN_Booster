@@ -387,6 +387,75 @@ function cran_inject_install_section() {
     copy_button.focus();
 }
 
+/**
+ * Link to packages by their canonical URL, both on CRAN and on
+ * Bioconductor.  CRAN spells its own package links out as
+ * '<cran>/web/packages/<pkg>/index.html', and the Bioconductor ones as
+ * 'https://www.bioconductor.org/packages/release/bioc/html/<pkg>.html'.
+ * The canonical forms, '<cran>/package=<pkg>' and
+ * 'https://www.bioconductor.org/packages/<pkg>/', are what one wants to
+ * copy.  The Bioconductor one is, unlike the spelled-out one, also
+ * independent of the Bioconductor release and of which tree the package
+ * lives in, e.g. 'data/annotation' rather than 'bioc'.
+ *
+ * Only links to package pages are rewritten.  Everything else is left
+ * alone, e.g. '<cran>/web/packages/<pkg>/<pkg>.pdf' and
+ * '<cran>/web/checks/check_results_<pkg>.html'.  Note that following a
+ * canonical URL costs one extra redirect.
+ */
+function cran_canonical_package_urls() {
+    var cran = new RegExp("^(https?://[^/]+)/web/packages/([^/]+)/(index[.]html)?$");
+    var bioc = new RegExp("^https?://(www[.])?bioconductor[.]org/packages/"
+                          + "[^/]+/(bioc|data/annotation|data/experiment|workflows)"
+                          + "/html/(.+)[.]html$");
+    var as = document.getElementsByTagName("a");
+    for (var i = 0; i < as.length; i++) {
+        var match = as[i].href.match(cran);
+        if (match !== null) {
+            as[i].href = match[1] + "/package=" + match[2];
+            continue;
+        }
+        match = as[i].href.match(bioc);
+        if (match !== null) {
+            as[i].href = "https://www.bioconductor.org/packages/" + match[3] + "/";
+        }
+    }
+}
+
+
+/**
+ * Show the canonical package URL in the URL bar, i.e.
+ * 'https://cran.r-project.org/package=KernSmooth' instead of
+ * '.../web/packages/KernSmooth/index.html', so that it is what one
+ * copies and bookmarks.  CRAN redirects (303) the canonical URL, and
+ * everything below it, to the real one, so reloading works.
+ *
+ * Note that 'history.replaceState()' also moves the base URL that the
+ * page's relative links resolve against.  That would break all of them,
+ * e.g. '../AER/index.html' would become '/AER/index.html'.  A <base>
+ * element pins them to the original folder.
+ *
+ * Note also that we must not use cran_url() here, because it reports
+ * 'https://CRAN.R-project.org/package=<pkg>' also when we are on a CRAN
+ * mirror, and rewriting to another host is not allowed.
+ */
+function cran_show_canonical_url() {
+    var here = window.location.origin + window.location.pathname;
+    var url = here;
+    url = url.replace(/\/web\/packages\//, '/package=');
+    url = url.replace(/index.html$/, '');
+    url = url.replace(/\/$/, '');
+    if (url == here) return;
+
+    // Keep the page's relative links resolving against the real folder
+    var base = document.createElement("base");
+    base.href = here.replace(/[^/]*$/, '');
+    document.head.insertBefore(base, document.head.firstChild);
+
+    window.history.replaceState(null, "", url);
+}
+
+
 function cran_inject_all() {
     cran_inject_materials();
     cran_inject_cran_checks();
@@ -422,7 +491,13 @@ function cran_inject_all() {
    so that it remains available also when everything else is disabled. */
 if (typeof rcb_on_settings === "function") {
     rcb_on_settings(function(settings) {
-        if (settings.enabled) cran_inject_all();
+        if (!settings.enabled) return;
+        cran_inject_all();
+        if (settings.canonical) {
+            cran_canonical_package_urls();
+            /* Last, so that cran_url() has already seen the original URL */
+            cran_show_canonical_url();
+        }
     });
 } else {
     cran_inject_all();

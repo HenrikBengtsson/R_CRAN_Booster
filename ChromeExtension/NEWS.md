@@ -1,7 +1,11 @@
 # Chrome Extension: R_CRAN_Booster
 
-## Version 0.2.1 [2026-09-15]
+## Version 0.3.0 [2026-09-15]
 
+### Significant Changes
+
+ * Add support for Firefox on Android.
+ 
 ### New Features
 
  * Add a settings icon to the upper, right corner of the CRAN package
@@ -17,6 +21,13 @@
    injected, so that they can be turned back on.  The color mode still
    applies, i.e. CRAN pages stay in dark mode.  Toggling reloads the page.
 
+ * The settings popup has an option for using canonical URLs, which is
+   off by default.  When turned on, the URL bar shows the canonical
+   package URL, e.g. `https://cran.r-project.org/package=KernSmooth`,
+   so that it is what is copied and bookmarked. The CRAN and
+   Bioconductor package links on the page are also rewritten to their
+   canonical form.
+   
 
 ## Version 0.2.0 [2024-09-08]
 
